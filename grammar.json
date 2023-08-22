@@ -1,0 +1,159 @@
+{
+    "ID": {
+        "lexeme": "ID",
+        "master_id": "A",
+        "function": "Assignment",
+        "syntax": {
+            "syntax_A01": {
+                "spec_id": "A01",
+                "serial": 1,
+                "syntax": "ID ASSIGN EXPRESSION EOL"
+            },
+            "syntax_A02": {
+                "spec_id": "A02",
+                "serial": 2,
+                "syntax": "ID ASSIGN ID EOL"
+            },
+            "syntax_A03": {
+                "spec_id": "A03",
+                "serial": 3,
+                "syntax": "ID ASSIGN FUNCTION EOL"
+            }
+        }
+    },
+    "FUNC": {
+        "lexeme": "FUNC",
+        "master_id": "B",
+        "function": "Function Declaration",
+        "syntax": {
+            "syntax_B01": {
+                "spec_id": "B01",
+                "serial": 1,
+                "syntax": "FUNC FUNCTION ASSIGN EXPRESSION EOL"
+            },
+            "syntax_B02": {
+                "spec_id": "B02",
+                "serial": 2,
+                "syntax": "FUNC FUNCTION ASSIGN ID EOL"
+            },
+            "syntax_B03": {
+                "spec_id": "B03",
+                "serial": 3,
+                "syntax": "FUNC FUNCTION ASSIGN FUNCTION EOL"
+            },
+            "syntax_B04": {
+                "spec_id": "B04",
+                "serial": 4,
+                "syntax": "FUNC FUNCTION LBRACE EOL"
+            }
+        }
+    },
+    "FUNCTION":{
+        "lexeme": "FUNCTION",
+        "master_id": "C",
+        "function": "Function Declaration",
+        "syntax": {
+            "syntax_C01": {
+                "spec_id": "C01",
+                "serial": 1,
+                "syntax": "FUNCTION ASSIGN EXPRESSION EOL"
+            },
+            "syntax_C02": {
+                "spec_id": "C02",
+                "serial": 2,
+                "syntax": "FUNCTION ASSIGN ID EOL"
+            },
+            "syntax_C03": {
+                "spec_id": "C03",
+                "serial": 3,
+                "syntax": "FUNCTION ASSIGN FUNCTION EOL"
+            }
+        }
+
+    },
+    "PRINT": {
+        "lexeme": "PRINT",
+        "master_id": "D",
+        "function": "Print",
+        "syntax": {
+            "syntax_D01": {
+                "spec_id": "D01",
+                "serial": 1,
+                "syntax": "PRINT EXPRESSION EOL"
+            },
+            "syntax_D02": {
+                "spec_id": "D02",
+                "serial": 2,
+                "syntax": "PRINT ID EOL"
+            },
+            "syntax_D03": {
+                "spec_id": "D03",
+                "serial": 3,
+                "syntax": "PRINT FUNCTION EOL"
+            }
+        }
+    },
+    "RETURN": {
+        "lexeme": "RETURN",
+        "master_id": "E",
+        "function": "Return value",
+        "syntax": {
+            "syntax_D01": {
+                "spec_id": "E01",
+                "serial": 1,
+                "syntax": "RETURN EXPRESSION EOL"
+            },
+            "syntax_D02": {
+                "spec_id": "E02",
+                "serial": 2,
+                "syntax": "RETURN ID EOL"
+            },
+            "syntax_D03": {
+                "spec_id": "E03",
+                "serial": 3,
+                "syntax": "RETURN FUNCTION EOL"
+            }
+        }
+    },
+    "RBRACE": {
+        "lexeme": "RBRACE",
+        "master_id": "F",
+        "function": "End of function",
+        "syntax": {
+            "syntax_E01": {
+                "spec_id": "F01",
+                "serial": 1,
+                "syntax": "RBRACE EOL"
+            }
+        }
+    },
+    "SHWTBL": {
+        "lexeme": "SHWTBL",
+        "master_id": "G",
+        "function": "Show Table",
+        "syntax": {
+            "syntax_F01": {
+                "spec_id": "G01",
+                "serial": 1,
+                "syntax": "SHWTBL FUNCTION EOL"
+            },
+            "syntax_F02": {
+                "spec_id": "G02",
+                "serial": 2,
+                "syntax": "SHWTBL NUM FUNCTION EOL"
+            }
+        }
+    },
+    "PLT": {
+        "lexeme": "PLT",
+        "master_id": "H",
+        "function": "Plot",
+        "syntax": {
+            "syntax_G01": {
+                "spec_id": "H01",
+                "serial": 1,
+                "syntax": "PLT FUNCTION EOL"
+            }
+        }
+    }
+}

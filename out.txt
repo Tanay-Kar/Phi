@@ -1,0 +1,4 @@
+[LINE grammar A:A01 <Contents[< Token ID :: 'a' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 0>, < Token EOL :: 'EOL' >]>]
+[LINE grammar A:A01 <Contents[< Token ID :: 'b' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 9>, < Token EOL :: 'EOL' >]>]
+[LINE grammar A:A01 <Contents[< Token ID :: 'c' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 1>, < Token EOL :: 'EOL' >]>]
+[LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["< Token ID :: 'x' >"]>, < Token EOL :: 'EOL' >]>]
