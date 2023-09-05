@@ -1,0 +1,5 @@
+a = < Expression 0>
+b = < Expression 9>
+c = < Expression 1>
+f = lambda [< Token ID :: 'x' >, < Token ID :: 'y' >]:< Expression (x MULT y)>
+d = lambda [< Token ID :: 'dx' >, < Token ID :: 'dy' >]:< Function sqrt args ['[< Expression ((dx CARET 2) PLUS (dy CARET 2))>]']>

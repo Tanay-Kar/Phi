@@ -137,14 +137,14 @@ class LineNode:
 
 
 # Instruction Blocks
-
+'''
 class AssignmentBlock:
     def __init__(self, line) -> None:
         self.line = line
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[Assignment Block {self.specid} \ncontent {self.line}]"
@@ -160,7 +160,7 @@ class FunctionDeclarationBlock:
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[Assignment Block {self.specid} \ncontent {self.line}]"
@@ -175,7 +175,7 @@ class PrintBlock:
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[Print Block {self.specid} \ncontent {self.line}]"
@@ -190,7 +190,7 @@ class ReturnBlock:
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[Return Block {self.specid} \ncontent {self.line}]"
@@ -205,7 +205,7 @@ class EndFuncBlock:
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[EndFunc Block {self.specid} \ncontent {self.line}]"
@@ -220,7 +220,7 @@ class ShowTableBlock:
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[ShowTable Block {self.specid} \ncontent {self.line}]"
@@ -235,10 +235,92 @@ class PlotBlock:
         self.extract()
 
     def extract(self):
-        self.specid = self.line[0].mastergrammar
+        self.specid = self.line.mastergrammar[0]
 
     def __str__(self) -> str:
         return f"[Plot Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+'''
+
+class AssignmentBlock:
+    def __init__(self, variable, value) -> None:
+        self.type = "ASSIGN"
+        self.variable = variable
+        self.value = value
+
+    def __str__(self) -> str:
+        return f"[Assignment Block {self.variable} = {self.value}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+class FunctionDeclarationBlock:
+    def __init__(self,function,mode:FuncMode,commands=None) -> None:
+        self.type = "FUNCDCLR"
+        self.function = function
+        self.func_mode = mode
+        self.commands = commands if commands else []
+    
+    def __str__(self) -> str:
+        return f"[Function Declaration Block {self.function}{self.commands if self.commands else ''}]"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+class PrintBlock:
+    def __init__(self,expression) -> None:
+        self.type = "PRINT"
+        self.expression = expression
+        
+    def __str__(self) -> str:
+        return f"[Print Block {self.expression}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+class ReturnBlock:
+    def __init__(self,expression) -> None:
+        self.type = "RETURN"
+        self.expression = expression
+    
+    def __str__(self) -> str:
+        return f"[Return Block {self.expression}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+class EndFuncBlock:
+    def __init__(self) -> None:
+        self.type = "ENDFUNC"
+        pass
+
+    def __str(self) -> str:
+        return f"[EndFunc Block]"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+class ShowTableBlock:
+    def __init__(self,function,num=None) -> None:
+        self.type = "SHWTBL"
+        self.function = function
+        self.num = num
+        
+    def __str__(self) -> str:
+        return f"[ShowTable Block {self.function} {self.num if self.num else ''}]"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
+
+class PlotBlock:
+    def __init__(self,function) -> None:
+        self.type = "PLOT"
+        self.function = function
+    
+    def __str__(self) -> str:
+        return f"[Plot Block {self.function}]"
 
     def __repr__(self) -> str:
         return self.__str__()
