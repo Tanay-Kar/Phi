@@ -101,6 +101,11 @@ class ExpressionParser:
             right = self.parse_factor()
             return FactorNode(right, sign='-')
 
+        elif self.current_token.type == 'EXPRESSION':
+            value = self.current_token.expression
+            self.advance()
+            return value
+        
         # Handle opening parenthesis "("
         elif self.current_token.type == 'LPAREN':
             self.advance()
@@ -173,17 +178,23 @@ class TupleParser:
         else:
             return True
 
-    def parse_item(self, items):
+    def parse_item(self, items_arg):
         tupletok = TupleToken()
         index = 0
+        items = ExpressionParserWrapper(items_arg+[Token('EOL','EOL')]).parse()
+        #items = items_arg
+        items.pop(-1)
+        print(items)
         # check if the list is empty
         if len(items) == 0:
             return tupletok
         # check if the list has only one item
         elif len(items) == 1:
-            if self.assert_type(items[0], 'ID') or self.assert_type(items[0], 'NUMBER'):
-                tupletok.add(items[0])
+            if self.assert_type(items[0], 'ID') or self.assert_type(items[0], 'EXPRESSION'):
+                print('Single item')
+                tupletok.add(items)
                 return tupletok
+            
 
         # check if the list has the format of a tuple
         id, sep = self.couplet(items, 0)
@@ -199,7 +210,7 @@ class TupleParser:
 
             return tupletok
         else:
-            return None
+            print('Not a tuple : ',items)
 
     def replace(self, st, end, new_item):
         self.tokens[st:end] = [new_item]
@@ -227,6 +238,8 @@ class TupleParser:
 
         self.index = -1
         self.parse_declarations()
+        self.index = -1
+        self.reverse_expr_parse()
         return self.tokens
 
     def parse_declarations(self):
@@ -236,6 +249,13 @@ class TupleParser:
                              DeclarationNode(self.current_token, self.tokens[self.index+1]))
 
             self.advance()
+    
+    def reverse_expr_parse(self):
+        while self.index < len(self.tokens):
+            if self.current_token.type == 'TUPLE' and len(self.current_token.variables) == 1:
+                self.tokens[self.index] = self.current_token.values[0][0]
+            self.advance()
+        
 
 
 class MasterParser:
@@ -332,9 +352,13 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
     
-    lexer = Lexer('h = f(x) + 6.5')
+    lexer = Lexer('f(x,y) = sqrt(x*y)^x + 2*(x+y)')
     tokens = lexer.get_tokens()
     with open('grammar.json', 'r') as f:
         grammar = json.load(f)
     parser = MasterParser(tokens, grammar)
     print(parser.parse())
+    '''lexer = Lexer('x+y,x')
+    tokens = lexer.get_tokens()
+    epw = ExpressionParserWrapper(tokens)
+    print(epw.parse())'''

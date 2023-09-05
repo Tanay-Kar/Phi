@@ -53,10 +53,9 @@ class TupleToken(Token):
         self.values = []
 
     def add(self, token):
-        if isinstance(token, Token):
-            self.variables.append(str(token))
-            self.values = self.variables
-
+        self.variables.append(str(token))
+        self.values.append(token)
+        
     def __str__(self):
         return f"< Tuple :: {' ,'.join(self.variables)} >"
 
