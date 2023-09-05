@@ -1,4 +1,6 @@
 [LINE grammar A:A01 <Contents[< Token ID :: 'a' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 0>, < Token EOL :: 'EOL' >]>]
 [LINE grammar A:A01 <Contents[< Token ID :: 'b' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 9>, < Token EOL :: 'EOL' >]>]
 [LINE grammar A:A01 <Contents[< Token ID :: 'c' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 1>, < Token EOL :: 'EOL' >]>]
-[LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["< Token ID :: 'x' >"]>, < Token EOL :: 'EOL' >]>]
+[LINE grammar C:C01 <Contents[< Function f args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression (((a MULT (x CARET 2)) PLUS (b MULT x)) PLUS c)>, < Token EOL :: 'EOL' >]>]
+[LINE grammar C:C03 <Contents[< Function d args ["< Token ID :: 'dx' >", "< Token ID :: 'dy' >"]>, < Token ASSIGN :: 'ASSIGN' >, < Function sqrt args ['[< Expression ((dx CARET 2) PLUS (dy CARET 2))>]']>, < Token EOL :: 'EOL' >]>]
+[LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]

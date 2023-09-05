@@ -2,6 +2,6 @@ a = 0
 b = 9
 c = 1
 
-f(x = )a.x^2 + b.x + c
-
+f(x) = a.x^2 + b.x + c
+d(dx,dy) = sqrt(dx^2+dy^2)
 plot f(x)

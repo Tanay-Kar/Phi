@@ -210,8 +210,9 @@ class TupleParser:
 
             return tupletok
         else:
-            print('Not a tuple : ',items)
+            pass  # I have no idea what this block does either 🤷‍♂️
 
+            
     def replace(self, st, end, new_item):
         self.tokens[st:end] = [new_item]
         self.index = st
