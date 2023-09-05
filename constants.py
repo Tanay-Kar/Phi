@@ -7,6 +7,8 @@ Author: Tanay Kar
 ----------------
 '''
 
+import typing
+
 r_ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
 r_Num = r'(\d+)\.?(\d+)*'
 r_Assign = r'='
@@ -30,6 +32,9 @@ keywords = {
     'return': 'RETURN',
     'plot': 'PLT',
 }
+
+# Formal mode is for functions with 'FUNC' keyword , direct is for direct declaration without 'FUNC' keyword
+FuncMode = typing.Literal['formal', 'direct']
 
 # Token Class
 
@@ -55,9 +60,10 @@ class TupleToken(Token):
     def add(self, token):
         self.variables.append(str(token))
         self.values.append(token)
-        
+
     def __str__(self):
         return f"< Tuple :: {' ,'.join(self.variables)} >"
+
 
 class BinOpNode:
     def __init__(self, left, operator, right):
@@ -89,9 +95,10 @@ class ExpressionNode:
     def __init__(self, expression, type_hint=None):
         self.type = "EXPRESSION"
         self.expression = expression
-        self.type_hint = type_hint # Used for a special case when the expression is a single number
+        # Used for a special case when the expression is a single number
+        self.type_hint = type_hint
         self.value = f"Expression {self.expression}"
-        
+
     def __str__(self) -> str:
         return f"< Expression {self.expression}>"
 
@@ -112,18 +119,126 @@ class DeclarationNode:
     def __repr__(self):
         return self.__str__()
 
+
 class LineNode:
-    def __init__(self, tokens:list, specid:str, primarykeyword:str, grammar:dict):
+    def __init__(self, tokens: list, specid: str, primarykeyword: str, grammar: dict):
         self.type = "LINE"
         self.tokens = tokens
         self.grammar = grammar
         self.mastergrammar = specid
         self.primarykeyword = primarykeyword
-        self.function = self.grammar[self.primarykeyword]['function']        
-        
-    
+        self.function = self.grammar[self.primarykeyword]['function']
+
     def __str__(self) -> str:
         return f"[LINE grammar {self.mastergrammar[0]}:{self.mastergrammar[0:]} <Contents{self.tokens}>]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+# Instruction Blocks
+
+class AssignmentBlock:
+    def __init__(self, line) -> None:
+        self.line = line
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[Assignment Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class FunctionDeclarationBlock:
+    def __init__(self, line, mode: FuncMode) -> None:
+        self.line = line
+        self.mode = mode
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[Assignment Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class PrintBlock:
+    def __init__(self, line) -> None:
+        self.line = line
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[Print Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class ReturnBlock:
+    def __init__(self, line) -> None:
+        self.line = line
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[Return Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class EndFuncBlock:
+    def __init__(self, line) -> None:
+        self.line = line
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[EndFunc Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class ShowTableBlock:
+    def __init__(self, line) -> None:
+        self.line = line
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[ShowTable Block {self.specid} \ncontent {self.line}]"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class PlotBlock:
+    def __init__(self, line) -> None:
+        self.line = line
+        self.extract()
+
+    def extract(self):
+        self.specid = self.line[0].mastergrammar
+
+    def __str__(self) -> str:
+        return f"[Plot Block {self.specid} \ncontent {self.line}]"
 
     def __repr__(self) -> str:
         return self.__str__()
