@@ -1,6 +1,1 @@
-a = 0
-b = 9
-c = 1
-
-f(x,y) = x*y
-d(dx,dy) = sqrt(dx^2+dy^2)
+f(89) = g(x+y,y-x)

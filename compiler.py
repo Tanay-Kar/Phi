@@ -6,8 +6,12 @@ compiler.py - Compiler for Phi
 Author: Tanay Kar
 ----------------
 '''
+
 from analyser import SpecificAnalyser
 from read import read_file
+import typing
+
+func_comp_type = typing.Literal['DCLR','CALL']
 
 class Compiler:
     def __init__(self,file,repr=False) -> None:
@@ -30,7 +34,6 @@ class Compiler:
         
         
     def compile(self):
-        print(self.precompile_temp)
         while self.current_line:
             match self.current_line.type:
                 case 'ASSIGN':
@@ -52,13 +55,47 @@ class Compiler:
         function = self.current_line.function
         command = self.current_line.commands
         args = function.args.values
-        code = f'{function.function_name} = lambda {args}:{command}\n'
+        code = f'{self.compile_function(function,"DCLR")}:{command}\n'
         self.precompiled_code += code
+    
+    def compile_function(self,func,type:func_comp_type):
+        name = func.function_name
+        args = func.args.values
+        # Tuple check
+        if type == 'DCLR':
+            if len(args) == 1:
+                if args[0][0].type != 'ID':
+                    raise TypeError(f'Expected ID, got {args[0][0].type}')
+                
+                print('Tuple len 1',args[0][0])
+                return str(name + ' = lambda ' + args[0][0].value)   
+            
+            # Ensure all args are of type 'ID'
+            for i in args:
+                if i.type != 'ID':
+                    raise TypeError(f'Expected ID, got {i.type}')
+            
+             
+            # Ensure all args are unique
+            seen = {}
+    
+            for index, element in enumerate([i.value for i in args]):
+                if element in seen:
+                    if seen[element] == 1:
+                        raise ValueError(f'Argument {element} is already defined')
+                    seen[element] += 1
+                else:
+                    seen[element] = 1
+        elif type == 'CALL':
+                ...
+            
+        print(args)
+        return str(name + ' = ' + ','.join([i.value for i in args]))
         
-    def compile_tuple():
+    def compile_tuple(self):
         ...
     
-    def compile_expr():
+    def compile_expr(self):
         ...
     
                 

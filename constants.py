@@ -36,8 +36,7 @@ keywords = {
 # Formal mode is for functions with 'FUNC' keyword , direct is for direct declaration without 'FUNC' keyword
 FuncMode = typing.Literal['formal', 'direct']
 
-# Token Class
-
+# Tokens
 
 class Token:
     def __init__(self, type, value=None):
@@ -64,6 +63,7 @@ class TupleToken(Token):
     def __str__(self):
         return f"< Tuple :: {' ,'.join(self.variables)} >"
 
+# Nodes
 
 class BinOpNode:
     def __init__(self, left, operator, right):
@@ -97,7 +97,7 @@ class ExpressionNode:
         self.expression = expression
         # Used for a special case when the expression is a single number
         self.type_hint = type_hint
-        self.value = f"Expression {self.expression}"
+        self.value = self.expression
 
     def __str__(self) -> str:
         return f"< Expression {self.expression}>"
@@ -111,7 +111,7 @@ class DeclarationNode:
         self.type = "FUNCTION"
         self.function_name = func.value
         self.args = args
-        self.value = f"Function {self.function_name} args {self.args.variables}"
+        self.value = self.function_name,self.args.values
 
     def __str__(self):
         return f"< Function {self.function_name} args {self.args.variables}>"
@@ -137,112 +137,6 @@ class LineNode:
 
 
 # Instruction Blocks
-'''
-class AssignmentBlock:
-    def __init__(self, line) -> None:
-        self.line = line
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[Assignment Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class FunctionDeclarationBlock:
-    def __init__(self, line, mode: FuncMode) -> None:
-        self.line = line
-        self.mode = mode
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[Assignment Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class PrintBlock:
-    def __init__(self, line) -> None:
-        self.line = line
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[Print Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class ReturnBlock:
-    def __init__(self, line) -> None:
-        self.line = line
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[Return Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class EndFuncBlock:
-    def __init__(self, line) -> None:
-        self.line = line
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[EndFunc Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class ShowTableBlock:
-    def __init__(self, line) -> None:
-        self.line = line
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[ShowTable Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class PlotBlock:
-    def __init__(self, line) -> None:
-        self.line = line
-        self.extract()
-
-    def extract(self):
-        self.specid = self.line.mastergrammar[0]
-
-    def __str__(self) -> str:
-        return f"[Plot Block {self.specid} \ncontent {self.line}]"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-'''
 
 class AssignmentBlock:
     def __init__(self, variable, value) -> None:

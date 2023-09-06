@@ -1,3 +1,2 @@
-f = lambda : 7+1
-
-print(f())
+def f(x):
+    return x

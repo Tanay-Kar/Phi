@@ -182,10 +182,12 @@ class TupleParser:
     def parse_item(self, items_arg):
         tupletok = TupleToken()
         index = 0
+        
         items = ExpressionParserWrapper(
             items_arg+[Token('EOL', 'EOL')]).parse()
-        # items = items_arg
-        items.pop(-1)
+        
+        items.pop(-1) # Remove the EOL token
+        
         # check if the list is empty
         if len(items) == 0:
             return tupletok
@@ -197,13 +199,13 @@ class TupleParser:
 
         # check if the list has the format of a tuple
         id, sep = self.couplet(items, 0)
-        if (self.assert_type(id, 'ID') or self.assert_type(id, 'NUMBER')) and self.assert_type(sep, 'COMMA'):
+        if (self.assert_type(id, 'ID') or self.assert_type(id, 'EXPRESSION')) and self.assert_type(sep, 'COMMA'):
             tupletok.add(id)
             index += 1
             while index < len(items):
                 sep, id = self.couplet(items, index)
                 self.assert_type(sep, 'COMMA', enforceable=True)
-                self.assert_type(id, 'ID', enforceable=True, alt_type='NUMBER')
+                self.assert_type(id, 'ID', enforceable=True, alt_type='EXPRESSION')
                 tupletok.add(id)
                 index += 2
 
@@ -235,13 +237,21 @@ class TupleParser:
 
             self.advance()
 
-        self.index = -1
+        
         self.parse_declarations()
-        self.index = -1
         self.reverse_expr_parse()
+        self.mark_functions()
         return self.tokens
-
+    
+    def mark_functions(self):
+        self.index = -1
+        while self.index < len(self.tokens):
+            if self.current_token.type == 'FUNCTION':
+                print(self.current_token.args.values)
+            self.advance()
+    
     def parse_declarations(self):
+        self.index = -1
         while self.index < len(self.tokens):
             if self.current_token and self.current_token.type == 'ID' and self.index + 1 < len(self.tokens) and self.tokens[self.index+1].type == 'TUPLE':
                 self.replace(self.index, self.index+2,
@@ -250,6 +260,7 @@ class TupleParser:
             self.advance()
 
     def reverse_expr_parse(self):
+        self.index = -1
         while self.index < len(self.tokens):
             if self.current_token.type == 'TUPLE' and len(self.current_token.variables) == 1:
                 self.tokens[self.index] = self.current_token.values[0][0]
@@ -351,7 +362,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('f(x,y) = sqrt(x*y)^x + 2*(x+y)')
+    lexer = Lexer('f(x,y+1) = 2*g(x+y,8+7)')
     tokens = lexer.get_tokens()
     with open('grammar.json', 'r') as f:
         grammar = json.load(f)
