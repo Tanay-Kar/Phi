@@ -24,15 +24,22 @@ class SpecificAnalyser:
                         value=i.tokens[2]
                         ))
                 case 'B':
-                    self.specicific_ast.append(const.FunctionDeclarationBlock(
-                        function=i.tokens[1],
-                        mode='direct',
-                        ))
+                    if i.mastergrammar in ('B01', 'B02','B03'):
+                        self.specicific_ast.append(const.FunctionDeclarationBlock(
+                            function=i.tokens[1],
+                            commands=i.tokens[3],
+                            mode='multiline',
+                            ))
+                    else:
+                        self.specicific_ast.append(const.FunctionDeclarationBlock(
+                            function=i.tokens[1],
+                            mode='multiline',
+                            ))
                 case 'C':
                     self.specicific_ast.append(const.FunctionDeclarationBlock(
                         function=i.tokens[0],
                         commands=i.tokens[2],
-                        mode='formal',
+                        mode='inline',
                         ))
                 case 'D':
                     self.specicific_ast.append(const.PrintBlock(

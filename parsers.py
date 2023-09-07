@@ -185,9 +185,9 @@ class TupleParser:
         
         items = ExpressionParserWrapper(
             items_arg+[Token('EOL', 'EOL')]).parse()
-        
-        items.pop(-1) # Remove the EOL token
-        
+
+        items.pop(-1)  # Remove the EOL token
+
         # check if the list is empty
         if len(items) == 0:
             return tupletok
@@ -205,7 +205,8 @@ class TupleParser:
             while index < len(items):
                 sep, id = self.couplet(items, index)
                 self.assert_type(sep, 'COMMA', enforceable=True)
-                self.assert_type(id, 'ID', enforceable=True, alt_type='EXPRESSION')
+                self.assert_type(id, 'ID', enforceable=True,
+                                 alt_type='EXPRESSION')
                 tupletok.add(id)
                 index += 2
 
@@ -240,16 +241,8 @@ class TupleParser:
         
         self.parse_declarations()
         self.reverse_expr_parse()
-        self.mark_functions()
         return self.tokens
-    
-    def mark_functions(self):
-        self.index = -1
-        while self.index < len(self.tokens):
-            if self.current_token.type == 'FUNCTION':
-                print(self.current_token.args.values)
-            self.advance()
-    
+
     def parse_declarations(self):
         self.index = -1
         while self.index < len(self.tokens):
@@ -281,7 +274,7 @@ class MasterParser:
         self.advance()
 
     def prepare(self):
-        tok = TupleParser(self.tokens).parse()
+        tok = TupleParser(self.tokens).parse()        
         tok = ExpressionParserWrapper(tok).parse()
         self.tokens = tok
 
@@ -362,8 +355,9 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('f(x,y+1) = 2*g(x+y,8+7)')
+    lexer = Lexer('x = a^2 + b^2 + 2 . a.b')
     tokens = lexer.get_tokens()
+    print(tokens)
     with open('grammar.json', 'r') as f:
         grammar = json.load(f)
     parser = MasterParser(tokens, grammar)

@@ -33,8 +33,8 @@ keywords = {
     'plot': 'PLT',
 }
 
-# Formal mode is for functions with 'FUNC' keyword , direct is for direct declaration without 'FUNC' keyword
-FuncMode = typing.Literal['formal', 'direct']
+# multiline definitions end with '{' and inline definitions are self-contained
+FuncMode = typing.Literal['multiline', 'inline']
 
 # Tokens
 
@@ -82,6 +82,7 @@ class BinOpNode:
 class FactorNode:
     def __init__(self, value, sign='+'):
         self.type = "FACTOR"
+        
         self.value = value if sign == '+' else '-' + value
 
     def __str__(self) -> str:
@@ -154,7 +155,7 @@ class FunctionDeclarationBlock:
     def __init__(self,function,mode:FuncMode,commands=None) -> None:
         self.type = "FUNCDCLR"
         self.function = function
-        self.func_mode = mode
+        self.mode = mode
         self.commands = commands if commands else []
     
     def __str__(self) -> str:

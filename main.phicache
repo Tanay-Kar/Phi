@@ -1,1 +1,6 @@
-f = lambda 89:< Function g args ['< Expression (x PLUS y)>', '< Expression (y MINUS x)>']>
+from math import *
+a = 1
+b = 9
+c = 20
+f = lambda x: (((a * (x ** 2)) + (b * x)) + c)
+print(f(4))

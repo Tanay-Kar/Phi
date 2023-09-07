@@ -1,1 +1,7 @@
-f(89) = g(x+y,y-x)
+a = 1
+b = 9
+c = 20
+
+f(x) = a.x^2 + b.x + c
+
+print f(-4)
