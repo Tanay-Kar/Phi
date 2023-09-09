@@ -11,17 +11,24 @@ from analyser import SpecificAnalyser
 from read import read_file
 import typing
 
-func_comp_type = typing.Literal['DCLR', 'CALL']
+func_comp_type = typing.Literal['DCLR', 'CALL', 'FORM']
 
 
 class Compiler:
-    def __init__(self, file_name, block=False,repr=False) -> None:
-        analyse = SpecificAnalyser(read_file(file_name))
-        self.ast = analyse.specicific_ast   
+    def __init__(self, file_name=None, ast=None, repr=False) -> None:
+        if file_name:
+            analyse = SpecificAnalyser(read_file(file_name))
+            self.ast = analyse.specicific_ast
+            self.block = False
+        else:
+            if ast:
+                self.ast = ast
+                self.block = True
+            else:
+                raise ValueError('Either file_name or ast must be provided')
         self.as_repr = repr
-        self.block = block
         self.precompiled_code = ''
-        if not block:    
+        if not self.block:
             self.precompiled_code = "from math import *\n"
             self.precompile_temp = file_name.split('.')[0] + '.phicache'
         self.line_no = -1
@@ -48,17 +55,23 @@ class Compiler:
                         self.compile_function_inline()
                 case 'PRINT':
                     self.compile_print()
+                case 'RETURN':
+                    self.compile_return()
             self.advance()
         if self.block:
             return self.precompiled_code
         with open(self.precompile_temp, 'w') as f:
             f.write(self.precompiled_code)
+
+    def compile_return(self):
+        expr = self.compile_expr(self.current_line.expression)
+        code = f'return {expr}\n'
+        self.precompiled_code += code
     
     def compile_print(self):
         expr = self.compile_expr(self.current_line.expression)
-        code = f'print({expr})'
+        code = f'\nprint({expr})\n'
         self.precompiled_code += code
-        
 
     def compile_assignment(self):
         variable = self.current_line.variable.value
@@ -68,7 +81,25 @@ class Compiler:
 
     def compile_function_multiline(self):
         print('Multiline')
-    
+        function = self.current_line.function
+        command = []
+        print(function)
+        self.advance()
+        for j,i in enumerate(self.ast[self.line_no:]):
+            if i.type == 'ENDFUNC':
+                command_code = Compiler(ast=command).compile()
+                command_code = '\t'+command_code.replace('\n','\n\t')
+                code = f'''def {self.compile_function(function,"FORM")}:\n{command_code}\n'''
+                print(code)
+                self.precompiled_code += code
+                return 
+
+            else:
+                print(i)
+                command.append(i)
+            self.advance()
+        raise SyntaxError('Function not closed')
+
     def compile_function_inline(self):
         function = self.current_line.function
         command = self.current_line.commands
@@ -83,7 +114,6 @@ class Compiler:
             if len(args) == 1:
                 if args[0][0].type != 'ID':
                     raise TypeError(f'Expected ID, got {args[0][0].type}')
-                print(name)
                 return str(name + ' = lambda ' + args[0][0].value)
 
             # Ensure all args are of type 'ID'
@@ -104,20 +134,28 @@ class Compiler:
                     seen[element] = 1
             arg_com = ''
             if len(args) == 1:
-                print(args[0])
                 arg_com = args[0][0].value
                 return f'{name} = lambda {arg_com}'
             else:
                 for i in args:
                     com = i.value
-                    arg_com += com + ','       
+                    arg_com += com + ','
                 return f'{name} = lambda {arg_com[:-1]}'
-                    
+
         elif type == 'CALL':
-            print(func)
             arg_com = ''
             if len(args) == 1:
-                print('ARG : ',self.compile_expr(args[0][0]))
+                arg_com = self.compile_expr(args[0][0])
+                return f'{name}({arg_com})'
+            else:
+                for i in args:
+                    com = self.compile_expr(i)
+                    arg_com += com + ','
+                return f'{name}({arg_com[:-1]})'
+        
+        elif type == 'FORM':
+            arg_com = ''
+            if len(args) == 1:
                 arg_com = self.compile_expr(args[0][0])
                 return f'{name}({arg_com})'
             else:
@@ -126,15 +164,12 @@ class Compiler:
                     arg_com += com + ','
                 return f'{name}({arg_com[:-1]})'
 
-
     def compile_expr(self, expr):
-        print(expr)
         match expr.type:
             case 'ID':
                 return expr.value
             case 'FUNCTION':
-                print('Function')
-                return self.compile_function(expr,'CALL')
+                return self.compile_function(expr, 'CALL')
             case 'EXPRESSION':
                 if expr.type_hint == 'NUM':
                     return expr.expression
@@ -144,24 +179,21 @@ class Compiler:
     def compile_binop(self, l, op, r):
         if r == None:
             raise ValueError('Right side of expression cannot be None')
-        
+
         if l.type == 'BINOP':
             l_com = self.compile_binop(l.left, l.operator, l.right)
         else:
             if l.value.type == 'FUNCTION':
-                l_com = self.compile_function(l.value,'CALL')
+                l_com = self.compile_function(l.value, 'CALL')
             else:
-                print('Else',l.value.type,l.value.value)
                 l_com = l.value.value
-    
-            
+
         if r.type == 'BINOP':
             r_com = self.compile_binop(r.left, r.operator, r.right)
         else:
             if r.value.type == 'FUNCTION':
-                r_com = self.compile_function(r.value,'CALL')
+                r_com = self.compile_function(r.value, 'CALL')
             else:
-                print('Else',r.value.type,r.value.value)
                 r_com = r.value.value
 
         match op:
@@ -178,5 +210,5 @@ class Compiler:
 
 
 if __name__ == '__main__':
-    compiler = Compiler('main.phi')
+    compiler = Compiler(file_name='main.phi')
     compiler.compile()

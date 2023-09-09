@@ -2,6 +2,9 @@ a = 1
 b = 9
 c = 20
 
-f(x) = a.x^2 + b.x + c
+func f(x) {
+    return a*x^2 + b*x + c
 
-print f(-x+4)
+}
+
+print f(4)

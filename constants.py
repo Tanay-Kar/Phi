@@ -82,9 +82,7 @@ class BinOpNode:
 class FactorNode:
     def __init__(self, value, sign='+'):
         self.type = "FACTOR"
-        print('FactorNode',value,value.type,sign)
         if isinstance(value, FactorNode):
-            print('Type is FactorNode',value.value)
             self.value = value.value if sign == '+' else Token('NUMBER','-' + value.value.value)
         else:    
             self.value = value if sign == '+' else Token('NUMBER','-' + value)
