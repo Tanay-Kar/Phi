@@ -82,8 +82,12 @@ class BinOpNode:
 class FactorNode:
     def __init__(self, value, sign='+'):
         self.type = "FACTOR"
-        
-        self.value = value if sign == '+' else '-' + value
+        print('FactorNode',value,value.type,sign)
+        if isinstance(value, FactorNode):
+            print('Type is FactorNode',value.value)
+            self.value = value.value if sign == '+' else Token('NUMBER','-' + value.value.value)
+        else:    
+            self.value = value if sign == '+' else Token('NUMBER','-' + value)
 
     def __str__(self) -> str:
         return f"{self.value.value}"

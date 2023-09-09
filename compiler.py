@@ -15,13 +15,15 @@ func_comp_type = typing.Literal['DCLR', 'CALL']
 
 
 class Compiler:
-    def __init__(self, file, repr=False) -> None:
-        analyse = SpecificAnalyser(read_file(file))
+    def __init__(self, file_name, block=False,repr=False) -> None:
+        analyse = SpecificAnalyser(read_file(file_name))
         self.ast = analyse.specicific_ast   
-            
-        self.precompiled_code = "from math import *\n"
         self.as_repr = repr
-        self.precompile_temp = file.split('.')[0] + '.phicache'
+        self.block = block
+        self.precompiled_code = ''
+        if not block:    
+            self.precompiled_code = "from math import *\n"
+            self.precompile_temp = file_name.split('.')[0] + '.phicache'
         self.line_no = -1
         self.current_line = None
         self.advance()
@@ -47,7 +49,8 @@ class Compiler:
                 case 'PRINT':
                     self.compile_print()
             self.advance()
-
+        if self.block:
+            return self.precompiled_code
         with open(self.precompile_temp, 'w') as f:
             f.write(self.precompiled_code)
     
@@ -64,7 +67,7 @@ class Compiler:
         self.precompiled_code += code
 
     def compile_function_multiline(self):
-        ...
+        print('Multiline')
     
     def compile_function_inline(self):
         function = self.current_line.function

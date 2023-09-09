@@ -4,4 +4,4 @@ c = 20
 
 f(x) = a.x^2 + b.x + c
 
-print f(-4)
+print f(-x+4)
