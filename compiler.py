@@ -89,7 +89,7 @@ class Compiler:
             if i.type == 'ENDFUNC':
                 command_code = Compiler(ast=command).compile()
                 command_code = '\t'+command_code.replace('\n','\n\t')
-                code = f'''def {self.compile_function(function,"FORM")}:\n{command_code}\n'''
+                code = f'''def {self.compile_function(function,"FORM")}:\n{command_code}'''
                 print(code)
                 self.precompiled_code += code
                 return 

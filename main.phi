@@ -3,7 +3,7 @@ b = 9
 c = 20
 
 func f(x) {
-    return a*x^2 + b*x + c
+    return a*x^2 + b*x^f(2) + c
 
 }
 
