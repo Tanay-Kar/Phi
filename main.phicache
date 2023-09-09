@@ -1,8 +1,19 @@
+
 from math import *
-a = 1
-b = 9
-c = 20
-def f(x):
-	return (((a * (x ** 2)) + (b * (x ** f(2)))) + c)
-	
-print(f(4))
+from matplotlib import pyplot as plt
+
+def __plot__(func,name):
+    x = [i/10 for i in range(-100, 100)]
+    y = [func(i) for i in x]
+    plt.plot(x, y)
+    plt.legend([name])
+    plt.title('Function Plot')
+    
+
+
+f = lambda x: (sin(x) ** 2)
+g = lambda x: (1 - (cos(x) ** 2))
+__plot__(f,'f')
+__plot__(g,'g')
+
+plt.show()

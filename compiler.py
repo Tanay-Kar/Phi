@@ -8,10 +8,11 @@ Author: Tanay Kar
 '''
 
 from analyser import SpecificAnalyser
+import header
 from read import read_file
 import typing
 
-func_comp_type = typing.Literal['DCLR', 'CALL', 'FORM']
+func_comp_type = typing.Literal['DCLR', 'CALL', 'FORM','NAME']
 
 
 class Compiler:
@@ -29,7 +30,7 @@ class Compiler:
         self.as_repr = repr
         self.precompiled_code = ''
         if not self.block:
-            self.precompiled_code = "from math import *\n"
+            self.precompiled_code += header.header
             self.precompile_temp = file_name.split('.')[0] + '.phicache'
         self.line_no = -1
         self.current_line = None
@@ -57,12 +58,21 @@ class Compiler:
                     self.compile_print()
                 case 'RETURN':
                     self.compile_return()
+                case 'PLOT':
+                    self.compile_plot()
             self.advance()
         if self.block:
             return self.precompiled_code
         with open(self.precompile_temp, 'w') as f:
+            self.precompiled_code += header.footer
             f.write(self.precompiled_code)
+        return self.precompile_temp
 
+    def compile_plot(self):
+        name = self.compile_function(self.current_line.function,'NAME')
+        code = f'__plot__({name},\'{name}\')\n'
+        self.precompiled_code += code
+    
     def compile_return(self):
         expr = self.compile_expr(self.current_line.expression)
         code = f'return {expr}\n'
@@ -163,6 +173,8 @@ class Compiler:
                     com = self.compile_expr(i)
                     arg_com += com + ','
                 return f'{name}({arg_com[:-1]})'
+        elif type == 'NAME':
+            return name
 
     def compile_expr(self, expr):
         match expr.type:
@@ -210,5 +222,8 @@ class Compiler:
 
 
 if __name__ == '__main__':
+    import os
+    
     compiler = Compiler(file_name='main.phi')
-    compiler.compile()
+    cache = compiler.compile()
+    os.system(f'python3 {cache}')

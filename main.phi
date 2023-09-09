@@ -1,10 +1,4 @@
-a = 1
-b = 9
-c = 20
-
-func f(x) {
-    return a*x^2 + b*x^f(2) + c
-
-}
-
-print f(4)
+f(x) = sin(x)^2
+g(x) = 1 - cos(x)^2
+plot f(x)
+plot g(x)

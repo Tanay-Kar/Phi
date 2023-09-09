@@ -1,10 +1,16 @@
-def f(x):
-    return x
 
-a = 10
-b = 5
+from math import *
+from matplotlib import pyplot as plt
 
-def sum():
-    return a + b
+def __plot__(func,name):
+    x = [i/10 for i in range(-100, 100, 1)]
+    y = [func(i) for i in x]
+    plt.plot(x, y)
+    plt.legend([name])
+    plt.title('Plot of function "' + name + '"')
 
-print(sum())
+
+__plot__(sin,'sin')
+__plot__(cos,'cos')
+
+plt.show()
