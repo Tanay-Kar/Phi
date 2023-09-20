@@ -60,6 +60,8 @@ class Compiler:
                     self.compile_return()
                 case 'PLOT':
                     self.compile_plot()
+                case 'SHWTBL':
+                    self.compile_showtable()
             self.advance()
         if self.block:
             return self.precompiled_code
@@ -68,6 +70,9 @@ class Compiler:
             f.write(self.precompiled_code)
         return self.precompile_temp
 
+    def compile_showtable(self):
+        print(self.current_line)
+    
     def compile_plot(self):
         name = self.compile_function(self.current_line.function,'NAME')
         code = f'__plot__({name},\'{name}\')\n'
@@ -99,7 +104,7 @@ class Compiler:
             if i.type == 'ENDFUNC':
                 command_code = Compiler(ast=command).compile()
                 command_code = '\t'+command_code.replace('\n','\n\t')
-                code = f'''def {self.compile_function(function,"FORM")}:\n{command_code}'''
+                code = f'''def {self.compile_function(function,"FORM")}:\n{command_code}\n'''
                 print(code)
                 self.precompiled_code += code
                 return 

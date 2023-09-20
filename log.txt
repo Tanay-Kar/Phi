@@ -1,4 +1,5 @@
-[LINE grammar C:C01 <Contents[< Function f args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression (('sin', [[< Token ID :: 'x' >]]) CARET 2)>, < Token EOL :: 'EOL' >]>]
-[LINE grammar C:C01 <Contents[< Function g args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression (1 MINUS (('cos', [[< Token ID :: 'x' >]]) CARET 2))>, < Token EOL :: 'EOL' >]>]
+[LINE grammar B:B04 <Contents[< Token FUNC :: 'FUNC' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token LBRACE :: 'LBRACE' >, < Token EOL :: 'EOL' >]>]
+[LINE grammar A:A01 <Contents[< Token ID :: 'a' >, < Token ASSIGN :: 'ASSIGN' >, < Expression (1 MINUS (x CARET 2))>, < Token EOL :: 'EOL' >]>]
+[LINE grammar E:E03 <Contents[< Token RETURN :: 'RETURN' >, < Function sqrt args ["[< Token ID :: 'a' >]"]>, < Token EOL :: 'EOL' >]>]
+[LINE grammar F:F01 <Contents[< Token RBRACE :: 'RBRACE' >, < Token EOL :: 'EOL' >]>]
 [LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]
-[LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function g args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]
