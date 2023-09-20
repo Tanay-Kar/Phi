@@ -109,15 +109,7 @@ class ExpressionParser:
 
         # Handle opening parenthesis "("
         elif self.current_token.type == 'LPAREN':
-            self.advance()
-            expr = self.parse_expression()
-            if self.current_token.type == 'COMMA':
-                pass  # Ensure closing parenthesis ")"
-            elif self.current_token.type == 'RPAREN':  # Ensure closing parenthesis ")"
-                self.advance()
-                return expr
-            else:
-                raise SyntaxError("Missing closing parenthesis")
+            raise NotImplementedError('Nested Paranthesis not supported yet')
 
 
 class ExpressionParserWrapper:
@@ -355,7 +347,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('x = a^2 + b^2 + 2 . a.b')
+    lexer = Lexer('x = 1 + (2 + 3 + 4)')
     tokens = lexer.get_tokens()
     print(tokens)
     with open('grammar.json', 'r') as f:
