@@ -1,6 +1,4 @@
-func f(x) {
-    a = 1 - x^2
-    return sqrt(a)
-}
-
+f(x) = x
+plot sin(x)
+plot cos(x)
 plot f(x)

@@ -31,7 +31,7 @@ class Compiler:
         self.precompiled_code = ''
         if not self.block:
             self.precompiled_code += header.header
-            self.precompile_temp = file_name.split('.')[0] + '.phicache'
+            self.precompile_temp = file_name.split('.')[0] + '_cache.py'
         self.line_no = -1
         self.current_line = None
         self.advance()
@@ -71,7 +71,7 @@ class Compiler:
         return self.precompile_temp
 
     def compile_showtable(self):
-        print(self.current_line)
+        raise NotImplementedError('Show Table not implemented yet')
     
     def compile_plot(self):
         name = self.compile_function(self.current_line.function,'NAME')
