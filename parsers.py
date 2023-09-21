@@ -164,7 +164,7 @@ class TupleParser:
     def assert_type(self, token, type, enforceable=False, alt_type=None):
         if token.type not in (type, alt_type):
             if enforceable:
-                raise Exception('Expected token type ' +
+                raise Exception(self.tokens + '\nExpected token type ' +
                                 type + ' but got ' + token.type)
             else:
                 return False
@@ -313,12 +313,12 @@ class MasterParser:
                     else:
                         if self.get_item(i, self.applicable_rules[0]) == 'EOL':
                             raise ParseError(
-                                f'Unexpected {self.tokens[i].type} \'{self.tokens[i].value}\'')
+                                f'{self.tokens} \nUnexpected {self.tokens[i].type} \'{self.tokens[i].value}\'')
                         raise ParseError(
-                            f'Expected {self.get_item(i,self.applicable_rules[0])} but recieved {self.tokens[i].type} \'{self.tokens[i].value}\'')
+                            f'{self.tokens} \nExpected {self.get_item(i,self.applicable_rules[0])} but recieved {self.tokens[i].type} \'{self.tokens[i].value}\'')
                 else:
                     raise ParseError(
-                        f'Unexpected {self.tokens[i].type} \'{self.tokens[i].value}\'')
+                        f'{self.tokens} \nUnexpected {self.tokens[i].type} \'{self.tokens[i].value}\'')
 
             else:
                 for j in range(len(self.applicable_rules)):

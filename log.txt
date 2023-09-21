@@ -1,2 +1,3 @@
-[LINE grammar I:I01 <Contents[< Token SOLVE :: 'SOLVE' >, < Function sin args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]
-[LINE grammar D:D01 <Contents[< Token PRINT :: 'PRINT' >, < Expression (3 PLUS ('sin', [[< Expression 8>]]))>, < Token EOL :: 'EOL' >]>]
+[LINE grammar C:C01 <Contents[< Function f args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression ((((x CARET 3) MINUS (4 MULT (x CARET 2))) PLUS x) PLUS 26)>, < Token EOL :: 'EOL' >]>]
+[LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]
+[LINE grammar I:I01 <Contents[< Token SOLVE :: 'SOLVE' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]

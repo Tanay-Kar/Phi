@@ -87,7 +87,7 @@ class Compiler:
             arg_def += f'{i} = sp.symbols(\'{i}\')\n'
         
         func_call = f'{name}({",".join(args)})'
-        code = f'{arg_def}\n___create_namespace___()\n___solve___({func_call},\'{name}\')\nfrom math import *'
+        code = f'{arg_def}\n___create_namespace___()\n___solve___({func_call},\'{name}\',\'{func_call}\')\nfrom math import *'
         self.precompiled_code += code
         
     def compile_showtable(self):
@@ -150,7 +150,7 @@ class Compiler:
             # Ensure all args are of type 'ID'
             for i in args:
                 if i.type != 'ID':
-                    raise TypeError(f'Expected ID, got {i.type}')
+                    raise TypeError(f'{self.current_line} \nExpected ID, got {i.type}')
 
             # Ensure all args are unique
             seen = {}

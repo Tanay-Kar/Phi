@@ -8,8 +8,11 @@ Author: Tanay Kar
 '''
 
 ___plot_limit___ =  10 # Change this to change the plot domain
-___resolution_factor___ = 10 # Change this to change the resolution of the plot
+___resolution_factor___ = 100 # Change this to change the resolution of the plot
 ___graph_theme_dark___ = True # Change this to change the theme of the plot
+___bidirectional___ = True # Change this to chose whether to plot the function in negative domain or not
+___y_scale___ = 'linear' # Change this to change the y scale of the plot
+
 
 header = f'''
 from math import *
@@ -30,7 +33,7 @@ with plt.ioff() :
 def __plot__(func,name):
     global table_used
     table_used = True
-    x = np.linspace({-___plot_limit___}, {___plot_limit___}, {round(2*___plot_limit___*___resolution_factor___)})
+    x = np.linspace({-___plot_limit___ if ___bidirectional___ else 0}, {___plot_limit___}, {round(2*___plot_limit___*___resolution_factor___)})
     try:
         y = np.vectorize(func)(x)
         
@@ -44,7 +47,7 @@ def __plot__(func,name):
             except Exception as e:
                 y[i] = np.nan
     plt.plot(x, y,label=name)
-    
+
 def ___create_namespace___():
     # This is just a helper function to create/destroy a namespace for sympy functions
     # In other words , this is just a tranquilizer for sympy's overly sensitive namespace
@@ -58,19 +61,48 @@ def ___create_namespace___():
         globals()[name] = getattr(sp, name) 
           
          
-def ___solve___(func,func_name):
-    print(sp.solve(func))
+def ___solve___(func,func_name,func_str):
+    roots = sp.solve(func)
+    
+    # Separate real and complex roots during iteration
+    real_roots = []
+    complex_roots = []
+
+    for root in roots:
+        if root.is_real:
+            real_roots.append(root)
+        else:
+            complex_roots.append(root)
+
+    # Print the results
+    print(f'\\nSolving {{func_str}} = {{func}}')
+    
+    if not roots:
+        print('No solutions found')
+    else:
+        if real_roots:
+            print("\\nReal Roots:")
+            for root in real_roots:
+                print(f"x = {{root:.2f}}")
+
+        if complex_roots:
+            print("\\nComplex Roots:")
+            for root in complex_roots:
+                real_part = sp.re(root)
+                imag_part = sp.im(root)
+                print(f"x = {{real_part:.2f}} + {{imag_part:.2f}}i")
        
 '''
 
 
-footer = '''
+footer = f'''
 if table_used:
     plt.axhline(y=0, color='grey')
     plt.axvline(x=0, color='grey')
     plt.axis('auto')
     plt.grid(linestyle=':')
     plt.legend()
+    plt.yscale(\'{___y_scale___}\')
     disconnect_zoom = zoom_factory(ax)
     pan_handler = panhandler(fig)
     plt.show()

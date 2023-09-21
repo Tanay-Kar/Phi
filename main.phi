@@ -1,2 +1,4 @@
-solve sin(x)
-print 3+sin(8)
+f(x) = x^3 - 4*x^2 + x + 26
+
+plot f(x)
+solve f(x)
