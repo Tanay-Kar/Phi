@@ -82,9 +82,12 @@ class ExpressionParser:
 
     def parse_factor(self):
         if self.current_token.type == 'NUMBER':
-
             value = self.current_token
             self.advance()
+            if self.current_token.type == 'ID':
+                var = self.current_token
+                self.advance()
+                return BinOpNode(FactorNode(value), 'MULT', FactorNode(var))
             return FactorNode(value)
 
         elif self.current_token.type == 'ID':
@@ -347,7 +350,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('x = 1 + (2 + 3 + 4)')
+    lexer = Lexer('x = a + 3a')
     tokens = lexer.get_tokens()
     print(tokens)
     with open('grammar.json', 'r') as f:

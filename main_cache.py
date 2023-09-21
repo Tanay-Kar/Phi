@@ -76,7 +76,7 @@ def ___solve___(func,func_name,func_str):
                 imag_part = sp.im(root)
                 print(f"x = {real_part:.2f} + {imag_part:.2f}i")
        
-f = lambda x: ((((x ** 3) - (4 * (x ** 2))) + x) + 26)
+f = lambda x: (3 * (x + 1))
 __plot__(f,'f')
 x = sp.symbols('x')
 

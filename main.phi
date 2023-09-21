@@ -1,4 +1,4 @@
-f(x) = x^3 - 4*x^2 + x + 26
+f(x) = 3*(x+1)
 
 plot f(x)
 solve f(x)
