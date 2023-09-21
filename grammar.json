@@ -98,17 +98,17 @@
         "master_id": "E",
         "function": "Return value",
         "syntax": {
-            "syntax_D01": {
+            "syntax_E01": {
                 "spec_id": "E01",
                 "serial": 1,
                 "syntax": "RETURN EXPRESSION EOL"
             },
-            "syntax_D02": {
+            "syntax_E02": {
                 "spec_id": "E02",
                 "serial": 2,
                 "syntax": "RETURN ID EOL"
             },
-            "syntax_D03": {
+            "syntax_E03": {
                 "spec_id": "E03",
                 "serial": 3,
                 "syntax": "RETURN FUNCTION EOL"
@@ -120,7 +120,7 @@
         "master_id": "F",
         "function": "End of function",
         "syntax": {
-            "syntax_E01": {
+            "syntax_F01": {
                 "spec_id": "F01",
                 "serial": 1,
                 "syntax": "RBRACE EOL"
@@ -132,12 +132,12 @@
         "master_id": "G",
         "function": "Show Table",
         "syntax": {
-            "syntax_F01": {
+            "syntax_G01": {
                 "spec_id": "G01",
                 "serial": 1,
                 "syntax": "SHWTBL FUNCTION EOL"
             },
-            "syntax_F02": {
+            "syntax_G02": {
                 "spec_id": "G02",
                 "serial": 2,
                 "syntax": "SHWTBL NUM FUNCTION EOL"
@@ -149,10 +149,22 @@
         "master_id": "H",
         "function": "Plot",
         "syntax": {
-            "syntax_G01": {
+            "syntax_H01": {
                 "spec_id": "H01",
                 "serial": 1,
                 "syntax": "PLT FUNCTION EOL"
+            }
+        }
+    },
+    "SOLVE": {
+        "lexeme": "SOLVE",
+        "master_id": "I",
+        "function": "Solve",
+        "syntax": {
+            "syntax_I01": {
+                "spec_id": "I01",
+                "serial": 1,
+                "syntax": "SOLVE FUNCTION EOL"
             }
         }
     }

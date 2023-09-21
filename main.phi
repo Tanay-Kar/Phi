@@ -1,4 +1,2 @@
-f(x) = x
-plot sin(x)
-plot cos(x)
-plot f(x)
+solve sin(x)
+print 3+sin(8)

@@ -12,7 +12,7 @@ import header
 from read import read_file
 import typing
 
-func_comp_type = typing.Literal['DCLR', 'CALL', 'FORM','NAME']
+func_comp_type = typing.Literal['DCLR', 'CALL', 'FORM','NAME','ARGS']
 
 
 class Compiler:
@@ -62,6 +62,8 @@ class Compiler:
                     self.compile_plot()
                 case 'SHWTBL':
                     self.compile_showtable()
+                case 'SOLVE':
+                    self.compile_solve()
             self.advance()
         if self.block:
             return self.precompiled_code
@@ -70,6 +72,24 @@ class Compiler:
             f.write(self.precompiled_code)
         return self.precompile_temp
 
+    def compile_solve(self):
+        _ = self.compile_function(self.current_line.function,'DCLR')
+        name = self.compile_function(self.current_line.function,'NAME')
+        args = self.compile_function(self.current_line.function,'ARGS')
+        if len(args) == 0:
+            raise TypeError('Cannot solve function with no arguments')
+        elif len(args) == 1:
+            args = list(args[0][0].value)
+        else:
+            args = [i.value for i in args]
+        arg_def = ''
+        for i in args:
+            arg_def += f'{i} = sp.symbols(\'{i}\')\n'
+        
+        func_call = f'{name}({",".join(args)})'
+        code = f'{arg_def}\n___create_namespace___()\n___solve___({func_call},\'{name}\')\nfrom math import *'
+        self.precompiled_code += code
+        
     def compile_showtable(self):
         raise NotImplementedError('Show Table not implemented yet')
     
@@ -95,22 +115,18 @@ class Compiler:
         self.precompiled_code += code
 
     def compile_function_multiline(self):
-        print('Multiline')
         function = self.current_line.function
         command = []
-        print(function)
         self.advance()
         for j,i in enumerate(self.ast[self.line_no:]):
             if i.type == 'ENDFUNC':
                 command_code = Compiler(ast=command).compile()
                 command_code = '\t'+command_code.replace('\n','\n\t')
                 code = f'''def {self.compile_function(function,"FORM")}:\n{command_code}\n'''
-                print(code)
                 self.precompiled_code += code
                 return 
 
             else:
-                print(i)
                 command.append(i)
             self.advance()
         raise SyntaxError('Function not closed')
@@ -180,7 +196,9 @@ class Compiler:
                 return f'{name}({arg_com[:-1]})'
         elif type == 'NAME':
             return name
-
+        elif type == 'ARGS':
+            return args
+        
     def compile_expr(self, expr):
         match expr.type:
             case 'ID':

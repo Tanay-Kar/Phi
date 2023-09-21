@@ -31,6 +31,7 @@ keywords = {
     'show': 'SHWTBL',
     'return': 'RETURN',
     'plot': 'PLT',
+    'solve': 'SOLVE',
 }
 
 # multiline definitions end with '{' and inline definitions are self-contained
@@ -207,6 +208,17 @@ class ShowTableBlock:
         
     def __str__(self) -> str:
         return f"[ShowTable Block {self.function} {self.num if self.num else ''}]"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
+
+class SolveBlock:
+    def __init__(self,function) -> None:
+        self.type = "SOLVE"
+        self.function = function
+        
+    def __str__(self) -> str:
+        return f"[Solve Block {self.function}]"
     
     def __repr__(self) -> str:
         return self.__str__()

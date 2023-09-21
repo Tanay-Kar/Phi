@@ -68,6 +68,10 @@ class SpecificAnalyser:
                     self.specicific_ast.append(const.PlotBlock(
                         function=i.tokens[1],
                     ))
+                case 'I':
+                    self.specicific_ast.append(const.SolveBlock(
+                        function=i.tokens[1],
+                    ))
 
 
 
