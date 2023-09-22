@@ -1,3 +1,4 @@
-[LINE grammar C:C01 <Contents[< Function f args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression ((x PLUS 1) CARET 2)>, < Token EOL :: 'EOL' >]>]
+[LINE grammar C:C01 <Contents[< Function g args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression ((<FACTOR < Token ID :: 'x' > sign=+> CARET <FACTOR < Token NUMBER :: '2' > sign=+>) MINUS <FACTOR < Token NUMBER :: '2' > sign=->)>, < Token EOL :: 'EOL' >]>]
+[LINE grammar C:C01 <Contents[< Function f args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression ((<FACTOR < Token NUMBER :: '3' > sign=+> MULT <FACTOR < Function g args ["[< Token ID :: 'x' >]"]> sign=+>) PLUS <FACTOR < Token NUMBER :: '4' > sign=+>)>, < Token EOL :: 'EOL' >]>]
 [LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]
 [LINE grammar I:I01 <Contents[< Token SOLVE :: 'SOLVE' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]

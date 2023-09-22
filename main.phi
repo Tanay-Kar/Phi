@@ -1,4 +1,6 @@
-f(x) = (x+1)^2
+g(x) = x^2 - -2
+
+f(x) = 3g(x)+4
 
 plot f(x)
 solve f(x)

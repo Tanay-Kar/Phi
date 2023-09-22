@@ -83,13 +83,14 @@ class BinOpNode:
 class FactorNode:
     def __init__(self, value, sign='+'):
         self.type = "FACTOR"
-        if isinstance(value, FactorNode):
-            self.value = value.value if sign == '+' else Token('NUMBER','-' + value.value.value)
-        else:    
-            self.value = value if sign == '+' else Token('NUMBER','-' + value)
+        if sign == '-':
+            self.value = value.value
+        else:
+            self.value = value
+        self.sign = sign
 
     def __str__(self) -> str:
-        return f"{self.value.value}"
+        return f"<FACTOR {self.value} sign={self.sign}>"
 
     def __repr__(self) -> str:
         return self.__str__()

@@ -221,7 +221,10 @@ class Compiler:
             if l.value.type == 'FUNCTION':
                 l_com = self.compile_function(l.value, 'CALL')
             else:
-                l_com = l.value.value
+                if l.sign == '-':
+                    l_com = f'-{l.value.value}'
+                else:
+                    l_com = l.value.value
 
         if r.type == 'BINOP':
             r_com = self.compile_binop(r.left, r.operator, r.right)
@@ -229,7 +232,10 @@ class Compiler:
             if r.value.type == 'FUNCTION':
                 r_com = self.compile_function(r.value, 'CALL')
             else:
-                r_com = r.value.value
+                if r.sign == '-':
+                    r_com = f'-{r.value.value}'
+                else:
+                    r_com = r.value.value
 
         match op:
             case 'PLUS':
