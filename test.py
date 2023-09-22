@@ -1,27 +1,11 @@
-import inspect
+import time
 
-l = lambda x: x**2
+# Split the selection into individual lines
+lines = ["from math import *", "import math", "from sympy import solve,im,re", "import numpy as np", "from matplotlib import pyplot as plt", "from mpl_interactions import panhandler, zoom_factory", "from ing_theme_matplotlib import mpl_style"]
 
-def f(x):
-    return x**3
-
-def g(x):
-    a = 8
-    return x**a
-
-def ___get_function___(func):
-    if not callable(func):
-        return None
-    if isinstance(func, type(lambda:0)) and func.__name__ == (lambda:0).__name__:
-        return inspect.getsource(func).split('\n')[0].split(':')[1].strip()
-    else:
-        commands = [i for i in inspect.getsource(func).split('\n') if i.strip()]
-        if len(commands) == 2:
-            return commands[1].strip().split('return')[1].strip()
-        else:
-            return None
-    
-
-print(___get_function___(l))
-print(___get_function___(f))
-print(___get_function___(g))
+# Loop through each line and measure the time taken
+for line in lines:
+    start_time = time.time()
+    exec(line)
+    end_time = time.time()
+    print(f"Time taken for '{line}': {end_time - start_time} seconds")

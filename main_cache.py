@@ -17,7 +17,7 @@ with plt.ioff() :
 def __plot__(func,name):
     global table_used
     table_used = True
-    x = np.linspace(-10, 10, 2000)
+    x = np.linspace(-15, 15, 3000)
     try:
         y = np.vectorize(func)(x)
         
@@ -76,14 +76,9 @@ def ___solve___(func,func_name,func_str):
                 imag_part = sp.im(root)
                 print(f"x = {real_part:.2f} + {imag_part:.2f}i")
        
-g = lambda x: ((x ** 2) - -2)
-f = lambda x: ((3 * g(x)) + 4)
+f = lambda x: sin(x)
 __plot__(f,'f')
-x = sp.symbols('x')
 
-___create_namespace___()
-___solve___(f(x),'f','f(x)')
-from math import *
 if table_used:
     plt.axhline(y=0, color='grey')
     plt.axvline(x=0, color='grey')
@@ -93,4 +88,9 @@ if table_used:
     plt.yscale('linear')
     disconnect_zoom = zoom_factory(ax)
     pan_handler = panhandler(fig)
+    if True:
+        if True:
+            plt.axis([-15, 15, -15, 15])
+        else:
+            plt.axis([0, 15, 0, 15])
     plt.show()

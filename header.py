@@ -7,12 +7,12 @@ Author: Tanay Kar
 ----------------
 '''
 
-___plot_limit___ =  10 # Change this to change the plot domain
+___plot_limit___ = 15 # Change this to change the plot domain
 ___resolution_factor___ = 100 # Change this to change the resolution of the plot
 ___graph_theme_dark___ = True # Change this to change the theme of the plot
 ___bidirectional___ = True # Change this to chose whether to plot the function in negative domain or not
 ___y_scale___ = 'linear' # Change this to change the y scale of the plot
-
+___equiscaled___ = True # Change this to make the plot scaled equally in both axes
 
 header = f'''
 from math import *
@@ -105,6 +105,11 @@ if table_used:
     plt.yscale(\'{___y_scale___}\')
     disconnect_zoom = zoom_factory(ax)
     pan_handler = panhandler(fig)
+    if {___equiscaled___}:
+        if {___bidirectional___}:
+            plt.axis([{-___plot_limit___}, {___plot_limit___}, {-___plot_limit___}, {___plot_limit___}])
+        else:
+            plt.axis([0, {___plot_limit___}, 0, {___plot_limit___}])
     plt.show()
 '''
 
