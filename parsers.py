@@ -168,112 +168,33 @@ class ExpressionParserWrapper:
 class TupleParser:
     def __init__(self, tokens):
         self.tokens = tokens
-        self.current_token = tokens[0]
-        self.tuple = TupleToken
-        self.index = -1
-        self.item_corpus = []
-        self.advance()
-
-    def advance(self):
-        self.index += 1
-        if self.index < len(self.tokens):
-            self.current_token = self.tokens[self.index]
-        else:
-            self.current_token = Token('EOL')
-
-    def couplet(self, items, stindex):
-        return items[stindex], items[stindex+1]
-
-    def assert_type(self, token, type, enforceable=False, alt_type=None):
-        if token.type not in (type, alt_type):
-            if enforceable:
-                raise Exception(self.tokens + '\nExpected token type ' +
-                                type + ' but got ' + token.type)
-            else:
-                return False
-        else:
-            return True
-
-    def parse_item(self, items_arg):
-        tupletok = TupleToken()
-        index = 0
-        
-        items = ExpressionParserWrapper(
-            items_arg+[Token('EOL', 'EOL')]).parse()
-
-        items.pop(-1)  # Remove the EOL token
-
-        # check if the list is empty
-        if len(items) == 0:
-            return tupletok
-        # check if the list has only one item
-        elif len(items) == 1:
-            if self.assert_type(items[0], 'ID') or self.assert_type(items[0], 'EXPRESSION'):
-                tupletok.add(items)
-                return tupletok
-
-        # check if the list has the format of a tuple
-        id, sep = self.couplet(items, 0)
-        if (self.assert_type(id, 'ID') or self.assert_type(id, 'EXPRESSION')) and self.assert_type(sep, 'COMMA'):
-            tupletok.add(id)
-            index += 1
-            while index < len(items):
-                sep, id = self.couplet(items, index)
-                self.assert_type(sep, 'COMMA', enforceable=True)
-                self.assert_type(id, 'ID', enforceable=True,
-                                 alt_type='EXPRESSION')
-                tupletok.add(id)
-                index += 2
-
-            return tupletok
-        else:
-            pass  # I have no idea what this block does either 🤷‍♂️
-
-    def replace(self, st, end, new_item):
-        self.tokens[st:end] = [new_item]
-        self.index = st
+        self.index = 0
 
     def parse(self):
-        t_items = []
+        result = []
         while self.index < len(self.tokens):
-            if self.current_token.type == 'LPAREN':
-                st = self.index
-                while self.current_token.type != 'RPAREN' and self.current_token.type != 'EOL':
-                    t_items.append(self.current_token)
-                    self.advance()
-                if self.tokens[self.index].type == 'RPAREN':
-                    t_items.pop(0)
-                    end = self.index + 1
-                    self.replace(st, end, self.parse_item(t_items))
+            token = self.tokens[self.index]
+            if token.type == 'LPAREN':
+                self.index += 1
+                sublist = TupleParser(self.tokens[self.index:]).parse()
+                result.append(sublist)
+                self.index += sublist_length(sublist)
+            elif token.type == 'RPAREN':
+                self.index += 1
+                return result
+            else:
+                result.append(token.value)
+                self.index += 1
+        return result
 
-                    t_items = []
-
-                elif self.tokens[self.index].type == 'EOL':
-                    raise ParseError('Missing closing parenthesis')
-
-            self.advance()
-
-        
-        self.parse_declarations()
-        self.reverse_expr_parse()
-        return self.tokens
-
-    def parse_declarations(self):
-        self.index = -1
-        while self.index < len(self.tokens):
-            if self.current_token and self.current_token.type == 'ID' and self.index + 1 < len(self.tokens) and self.tokens[self.index+1].type == 'TUPLE':
-                self.replace(self.index, self.index+2,
-                             DeclarationNode(self.current_token, self.tokens[self.index+1]))
-
-            self.advance()
-
-    def reverse_expr_parse(self):
-        self.index = -1
-        while self.index < len(self.tokens):
-            if self.current_token.type == 'TUPLE' and len(self.current_token.variables) == 1:
-                self.tokens[self.index] = self.current_token.values[0][0]
-            self.advance()
-
+def sublist_length(sublist):
+    length = 0
+    for item in sublist:
+        if isinstance(item, list):
+            length += sublist_length(item)
+        else:
+            length += 1
+    return length
 
 class MasterParser:
     def __init__(self, tokens, grammar: dict):
@@ -370,13 +291,15 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('x = a + 3(a+1)')
+    lexer = Lexer('x = a + (3 + (4 * x) + 8)')
     tokens = lexer.get_tokens()
     print(tokens)
-    with open('grammar.json', 'r') as f:
-        grammar = json.load(f)
-    parser = MasterParser(tokens, grammar)
-    print(parser.parse())
+    tp = TupleParser(tokens)
+    print(tp.parse())
+    # with open('grammar.json', 'r') as f:
+    #     grammar = json.load(f)
+    # parser = MasterParser(tokens, grammar)
+    # print(parser.parse())
     '''lexer = Lexer('x+y,x')
     tokens = lexer.get_tokens()
     epw = ExpressionParserWrapper(tokens)
