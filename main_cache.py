@@ -11,6 +11,8 @@ from ing_theme_matplotlib import mpl_style
 table_used = False
 mpl_style(dark=True,minor_ticks=True)
 
+i = sp.I if False else 1j
+
 with plt.ioff() :
     fig, ax = plt.subplots()
     
@@ -76,9 +78,15 @@ def ___solve___(func,func_name,func_str):
                 imag_part = sp.im(root)
                 print(f"x = {real_part:.2f} + {imag_part:.2f}i")
        
-f = lambda x: sin(x)
-__plot__(f,'f')
+def f(x):
+	a = (x + 1)
+	return (a ** 2)
+	
+x = sp.symbols('x')
 
+___create_namespace___()
+___solve___(f(x),'f','f(x)')
+from math import *
 if table_used:
     plt.axhline(y=0, color='grey')
     plt.axvline(x=0, color='grey')

@@ -120,6 +120,14 @@ class ExpressionParser:
         elif self.current_token.type == 'EXPRESSION':
             value = self.current_token.expression
             self.advance()
+            if self.current_token.type == 'ID' or self.current_token.type == 'FUNCTION':
+                var = self.current_token
+                self.advance()
+                return BinOpNode(value, 'MULT', FactorNode(var))
+            elif self.current_token.type == 'EXPRESSION':
+                var = self.current_token
+                self.advance()
+                return BinOpNode(value, 'MULT', var.expression)
             return value
 
         # Handle opening parenthesis "("

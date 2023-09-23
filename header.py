@@ -13,7 +13,7 @@ ___graph_theme_dark___ = True # Change this to change the theme of the plot
 ___bidirectional___ = True # Change this to chose whether to plot the function in negative domain or not
 ___y_scale___ = 'linear' # Change this to change the y scale of the plot
 ___equiscaled___ = True # Change this to make the plot scaled equally in both axes
-
+___define_iota___ = False # Change this to define iota as a constant
 header = f'''
 from math import *
 import math
@@ -26,6 +26,8 @@ from ing_theme_matplotlib import mpl_style
 
 table_used = False
 mpl_style(dark={___graph_theme_dark___},minor_ticks=True)
+
+i = sp.I if {___define_iota___} else 1j
 
 with plt.ioff() :
     fig, ax = plt.subplots()
