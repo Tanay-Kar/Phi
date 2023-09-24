@@ -1,6 +1,82 @@
-[LINE grammar A:A01 <Contents[< Token ID :: 'a' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 0>, < Token EOL :: 'EOL' >]>]
-[LINE grammar A:A01 <Contents[< Token ID :: 'b' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 9>, < Token EOL :: 'EOL' >]>]
-[LINE grammar A:A01 <Contents[< Token ID :: 'c' >, < Token ASSIGN :: 'ASSIGN' >, < Expression 1>, < Token EOL :: 'EOL' >]>]
-[LINE grammar C:C01 <Contents[< Function f args ["[< Token ID :: 'x' >]"]>, < Token ASSIGN :: 'ASSIGN' >, < Expression (((a MULT (x CARET 2)) PLUS (b MULT x)) PLUS c)>, < Token EOL :: 'EOL' >]>]
-[LINE grammar C:C03 <Contents[< Function d args ["< Token ID :: 'dx' >", "< Token ID :: 'dy' >"]>, < Token ASSIGN :: 'ASSIGN' >, < Function sqrt args ['[< Expression ((dx CARET 2) PLUS (dy CARET 2))>]']>, < Token EOL :: 'EOL' >]>]
-[LINE grammar H:H01 <Contents[< Token PLT :: 'PLT' >, < Function f args ["[< Token ID :: 'x' >]"]>, < Token EOL :: 'EOL' >]>]
+[< Token LPAREN :: 'LPAREN' >, < Token ID :: 'a' >, < Token PLUS :: 'PLUS' >, < Token LPAREN :: 'LPAREN' >, < Token NUMBER :: '3' >, < Token PLUS :: 'PLUS' >, < Token LPAREN :: 'LPAREN' >, < Token NUMBER :: '4' >, < Token MULT :: 'MULT' >, < Token ID :: 'y' >, < Token RPAREN :: 'RPAREN' >, < Token RPAREN :: 'RPAREN' >, < Token RPAREN :: 'RPAREN' >, < Token EOL :: 'EOL' >]
+result=[]
+[LPAREN : a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 0
+
+
+result=[]
+[a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 0
+
+
+result=['a']
+[a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 1
+
+
+result=['a', 'PLUS']
+[a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 2
+
+
+result=[]
+[3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 0
+
+
+result=['3']
+[3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 1
+
+
+result=['3', 'PLUS']
+[3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 2
+
+
+result=[]
+[4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 0
+
+
+result=['4']
+[4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 1
+
+
+result=['4', 'MULT']
+[4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 2
+
+
+result=['4', 'MULT', 'y']
+[4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 3
+
+
+result=['3', 'PLUS', ['4', 'MULT', 'y']]
+[3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 6
+
+
+result=['a', 'PLUS', ['3', 'PLUS', ['4', 'MULT', 'y']]]
+[a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 8
+
+
+result=['a', 'PLUS', ['3', 'PLUS', ['4', 'MULT', 'y']], 'y']
+[a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 9
+
+
+result=[['a', 'PLUS', ['3', 'PLUS', ['4', 'MULT', 'y']], 'y']]
+[LPAREN : a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 9
+
+
+result=[['a', 'PLUS', ['3', 'PLUS', ['4', 'MULT', 'y']], 'y'], 'y']
+[LPAREN : a : PLUS : LPAREN : 3 : PLUS : LPAREN : 4 : MULT : y : RPAREN : RPAREN : RPAREN : EOL] :::
+ 10
+
+
+[['a', 'PLUS', ['3', 'PLUS', ['4', 'MULT', 'y']], 'y'], 'y']
