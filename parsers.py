@@ -170,31 +170,34 @@ class TupleParser:
         self.tokens = tokens
         self.index = 0
 
-    def parse(self):
-        result = []
-        while self.index < len(self.tokens):
-            token = self.tokens[self.index]
-            if token.type == 'LPAREN':
-                self.index += 1
-                sublist = TupleParser(self.tokens[self.index:]).parse()
-                result.append(sublist)
-                self.index += sublist_length(sublist)
-            elif token.type == 'RPAREN':
-                self.index += 1
-                return result
-            else:
-                result.append(token.value)
-                self.index += 1
-        return result
+    def push(self,obj, l, depth):
+        while depth:
+            l = l[-1]
+            depth -= 1
 
-def sublist_length(sublist):
-    length = 0
-    for item in sublist:
-        if isinstance(item, list):
-            length += sublist_length(item)
+        l.append(obj)
+
+    def parse(self,s):
+        groups = []
+        depth = 0
+
+        try:
+            for char in s:
+                if char == 'LPAREN':
+                    self.push([], groups, depth)
+                    depth += 1
+                elif char == 'RPAREN':
+                    depth -= 1
+                else:
+                    self.push(char, groups, depth)
+                    
+        except IndexError:
+            raise ValueError('Parentheses mismatch')
+
+        if depth > 0:
+            raise ValueError('Parentheses mismatch')
         else:
-            length += 1
-    return length
+            return groups           
 
 class MasterParser:
     def __init__(self, tokens, grammar: dict):
@@ -291,11 +294,12 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('x = a + (3 + (4 * x) + 8)')
+    lexer = Lexer('(a + (3 + (4 * y)+c)+d)')
     tokens = lexer.get_tokens()
+    tok = [i.value for i in tokens]
     print(tokens)
-    tp = TupleParser(tokens)
-    print(tp.parse())
+    tp = TupleParser(tok)
+    print(tp.parse(tok))
     # with open('grammar.json', 'r') as f:
     #     grammar = json.load(f)
     # parser = MasterParser(tokens, grammar)

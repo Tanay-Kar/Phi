@@ -1,11 +1,30 @@
-import time
+def push(obj, l, depth):
+    while depth:
+        l = l[-1]
+        depth -= 1
 
-# Split the selection into individual lines
-lines = ["from math import *", "import math", "from sympy import solve,im,re", "import numpy as np", "from matplotlib import pyplot as plt", "from mpl_interactions import panhandler, zoom_factory", "from ing_theme_matplotlib import mpl_style"]
+    l.append(obj)
 
-# Loop through each line and measure the time taken
-for line in lines:
-    start_time = time.time()
-    exec(line)
-    end_time = time.time()
-    print(f"Time taken for '{line}': {end_time - start_time} seconds")
+def parse_parentheses(s):
+    groups = []
+    depth = 0
+
+    try:
+        for char in s:
+            if char == '(':
+                push([], groups, depth)
+                depth += 1
+            elif char == ')':
+                depth -= 1
+            else:
+                push(char, groups, depth)
+                
+    except IndexError:
+        raise ValueError('Parentheses mismatch')
+
+    if depth > 0:
+        raise ValueError('Parentheses mismatch')
+    else:
+        return groups
+
+print(parse_parentheses('a+b-(c+(d*8))')) # ['a', ['b', ['c', 'd'], 'f']]
