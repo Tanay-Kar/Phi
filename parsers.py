@@ -170,7 +170,7 @@ class TupleParser:
         self.tokens = tokens
         self.index = 0
 
-    def push(self,obj, l, depth):
+    def push(self,obj, l:list, depth):
         while depth:
             l = l[-1]
             depth -= 1
@@ -183,10 +183,10 @@ class TupleParser:
 
         try:
             for char in s:
-                if char == 'LPAREN':
+                if char.type == 'LPAREN':
                     self.push([], groups, depth)
                     depth += 1
-                elif char == 'RPAREN':
+                elif char.type == 'RPAREN':
                     depth -= 1
                 else:
                     self.push(char, groups, depth)
@@ -294,10 +294,10 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('(a + (3 + (4 * y)+c)+d)')
+    lexer = Lexer('a + (3 + 8) - (b - c)')
     tokens = lexer.get_tokens()
-    tok = [i.value for i in tokens]
-    print(tokens)
+    tok = [i for i in tokens]
+    # print(tokens)
     tp = TupleParser(tok)
     print(tp.parse(tok))
     # with open('grammar.json', 'r') as f:
