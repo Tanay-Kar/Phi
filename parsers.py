@@ -177,7 +177,7 @@ class TupleParser:
 
         l.append(obj)
 
-    def parse(self,s):
+    def parse_paren(self,s):
         groups = []
         depth = 0
 
@@ -197,7 +197,10 @@ class TupleParser:
         if depth > 0:
             raise ValueError('Parentheses mismatch')
         else:
-            return groups           
+            return groups    
+    
+    def parse(self):
+        self.tokens = self.parse_paren()       
 
 class MasterParser:
     def __init__(self, tokens, grammar: dict):
@@ -299,7 +302,7 @@ if __name__ == '__main__':
     tok = [i for i in tokens]
     # print(tokens)
     tp = TupleParser(tok)
-    print(tp.parse(tok))
+    print(tp.parse())
     # with open('grammar.json', 'r') as f:
     #     grammar = json.load(f)
     # parser = MasterParser(tokens, grammar)
