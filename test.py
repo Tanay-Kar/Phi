@@ -1,30 +1,25 @@
-def push(obj, l, depth):
-    while depth:
-        l = l[-1]
-        depth -= 1
+class TupleList(list):
+    def __init__(self, *args):
+        super(TupleList, self).__init__(args)
+    
+    def __repr__(self):
+        return f'<< {str(list(self))} >>'
+        
+def convert_to_tuples(input_list, element_func=None):
+    for i, item in enumerate(input_list):
+        if isinstance(item, list):
+            input_list[i] = convert_to_tuples(item, element_func)
+        elif element_func is not None:
+            input_list[i] = element_func(item)
+    return TupleList(input_list)
 
-    l.append(obj)
+# Define a custom function to perform an operation on list elements (e.g., converting to uppercase)
+def custom_operation(element):
+    return element.upper()
 
-def parse_parentheses(s):
-    groups = []
-    depth = 0
+input_list = ['a', 'b', ['c', 'd', ['i']], 'e', ['f', ['j']], 'g', 'h']
 
-    try:
-        for char in s:
-            if char == '(':
-                push([], groups, depth)
-                depth += 1
-            elif char == ')':
-                depth -= 1
-            else:
-                push(char, groups, depth)
-                
-    except IndexError:
-        raise ValueError('Parentheses mismatch')
+tuple_result = convert_to_tuples(input_list, element_func=custom_operation)
 
-    if depth > 0:
-        raise ValueError('Parentheses mismatch')
-    else:
-        return groups
+print(tuple_result)
 
-print(parse_parentheses('a+b-(c+(d*8))')) # ['a', ['b', ['c', 'd'], 'f']]
