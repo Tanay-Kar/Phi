@@ -28,7 +28,7 @@ class ExpressionParser:
                 break
 
     def peek(self):
-        return self.tokens[self.index+1] if self.index+1 < len(self.tokens) else None
+        return self.tokens[self.index + 1] if self.index + 1 < len(self.tokens) else None
 
     def return_slice(self):
         return self.startindex, self.endindex
@@ -110,11 +110,11 @@ class ExpressionParser:
             if self.current_token.type == 'ID' or self.current_token.type == 'FUNCTION':
                 var = self.current_token
                 self.advance()
-                return BinOpNode(FactorNode(value,sign='-'), 'MULT', FactorNode(var))
+                return BinOpNode(FactorNode(value, sign='-'), 'MULT', FactorNode(var))
             elif self.current_token.type == 'EXPRESSION':
                 var = self.current_token
                 self.advance()
-                return BinOpNode(FactorNode(value,sign='-'), 'MULT', var.expression)
+                return BinOpNode(FactorNode(value, sign='-'), 'MULT', var.expression)
             return FactorNode(right, sign='-')
 
         elif self.current_token.type == 'EXPRESSION':
@@ -155,7 +155,7 @@ class ExpressionParserWrapper:
 
     def parse(self):
         while self.current_token.type != "EOL":
-            ep = ExpressionParser(self.tokens[self.index-1:])
+            ep = ExpressionParser(self.tokens[self.index - 1:])
             pr = ep.parse()
             sl1, sl0 = [i + self.index - 1 for i in ep.return_slice()]
             if pr:
@@ -169,15 +169,18 @@ class TupleParser:
     def __init__(self, tokens):
         self.tokens = tokens
         self.index = 0
+        tokens = self.parse_depth(tokens)
+        tokens = self.parse(tokens,_first=True)
+        print(tokens)
 
-    def push(self,obj, l:list, depth):
+    def push(self, obj, l: list, depth):
         while depth:
             l = l[-1]
             depth -= 1
 
         l.append(obj)
 
-    def parse_paren(self,s):
+    def parse_depth(self, s):
         groups = []
         depth = 0
 
@@ -190,17 +193,33 @@ class TupleParser:
                     depth -= 1
                 else:
                     self.push(char, groups, depth)
-                    
+
         except IndexError:
             raise ValueError('Parentheses mismatch')
 
         if depth > 0:
             raise ValueError('Parentheses mismatch')
         else:
-            return groups    
-    
-    def parse(self):
-        self.tokens = self.parse_paren()       
+            print('Group :',groups)
+            return groups
+
+    def parse_function(self, tokens):
+        for i, e in enumerate(tokens):
+            if e.type == 'ID' and i < len(tokens) - 1 and tokens[i + 1].type == 'TUPLE':
+                tokens[i] = DeclarationNode(e, tokens[i + 1])
+                tokens.pop(i + 1)
+        return tokens
+
+    def parse(self, tokens,_first=False):
+        for i, item in enumerate(tokens):
+            if isinstance(item, list):
+                tokens[i] = self.parse(item)
+        
+        print(tokens)
+        if not _first:
+            return TupleToken(tokens)
+        return tokens
+
 
 class MasterParser:
     def __init__(self, tokens, grammar: dict):
@@ -216,7 +235,7 @@ class MasterParser:
         self.advance()
 
     def prepare(self):
-        tok = TupleParser(self.tokens).parse()        
+        tok = TupleParser(self.tokens).parse()
         tok = ExpressionParserWrapper(tok).parse()
         self.tokens = tok
 
@@ -297,12 +316,13 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('a + (3 + 8) - (b - c)')
+    lexer = Lexer('3 + 4 - (7 + 9)')
     tokens = lexer.get_tokens()
     tok = [i for i in tokens]
     # print(tokens)
     tp = TupleParser(tok)
-    print(tp.parse())
+    # print(tp)
+
     # with open('grammar.json', 'r') as f:
     #     grammar = json.load(f)
     # parser = MasterParser(tokens, grammar)

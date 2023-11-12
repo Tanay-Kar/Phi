@@ -52,17 +52,16 @@ class Token:
 
 
 class TupleToken(Token):
-    def __init__(self):
+    def __init__(self,lst):
         super().__init__(type='TUPLE')
-        self.variables = []
-        self.values = []
+        self.variables = lst
+        self.values = lst
 
     def add(self, token):
         self.variables.append(str(token))
-        self.values.append(token)
 
     def __str__(self):
-        return f"< Tuple :: {' ,'.join(self.variables)} >"
+        return f"< Tuple :: {self.variables} >"
 
 # Nodes
 
