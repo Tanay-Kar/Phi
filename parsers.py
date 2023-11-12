@@ -170,8 +170,9 @@ class TupleParser:
         self.tokens = tokens
         self.index = 0
         tokens = self.parse_depth(tokens)
-        tokens = self.parse(tokens,_first=True)
-        print(tokens)
+        tokens = self.format_tuples(tokens,_first=True)
+        self.tokens = self.parse_function(tokens)
+        
 
     def push(self, obj, l: list, depth):
         while depth:
@@ -200,7 +201,6 @@ class TupleParser:
         if depth > 0:
             raise ValueError('Parentheses mismatch')
         else:
-            print('Group :',groups)
             return groups
 
     def parse_function(self, tokens):
@@ -210,16 +210,17 @@ class TupleParser:
                 tokens.pop(i + 1)
         return tokens
 
-    def parse(self, tokens,_first=False):
+    def format_tuples(self, tokens,_first=False):
         for i, item in enumerate(tokens):
             if isinstance(item, list):
-                tokens[i] = self.parse(item)
+                tokens[i] = self.format_tuples(item)
         
-        print(tokens)
         if not _first:
             return TupleToken(tokens)
         return tokens
 
+    def parse(self):
+        return self.tokens
 
 class MasterParser:
     def __init__(self, tokens, grammar: dict):
@@ -316,17 +317,17 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('3 + 4 - (7 + 9)')
+    lexer = Lexer('b = 3 + f(6-7)')
     tokens = lexer.get_tokens()
-    tok = [i for i in tokens]
+    # tok = [i for i in tokens]
     # print(tokens)
-    tp = TupleParser(tok)
+    # tp = TupleParser(tok).parse()
     # print(tp)
 
-    # with open('grammar.json', 'r') as f:
-    #     grammar = json.load(f)
-    # parser = MasterParser(tokens, grammar)
-    # print(parser.parse())
+    with open('grammar.json', 'r') as f:
+        grammar = json.load(f)
+    parser = MasterParser(tokens, grammar)
+    print(parser.parse())
     '''lexer = Lexer('x+y,x')
     tokens = lexer.get_tokens()
     epw = ExpressionParserWrapper(tokens)
