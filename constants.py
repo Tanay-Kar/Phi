@@ -8,6 +8,7 @@ Author: Tanay Kar
 '''
 
 import typing
+from parsers import ExpressionParserWrapper
 
 r_ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
 r_Num = r'(\d+)\.?(\d+)*'
@@ -116,6 +117,10 @@ class DeclarationNode:
         self.function_name = func.value
         self.args = args
         self.value = self.function_name,self.args.values
+        self.organise_args()
+        
+    def organise_args(self):
+        print('My Args',self.args.variables)    
 
     def __str__(self):
         return f"< Function {self.function_name} args {self.args.variables}>"

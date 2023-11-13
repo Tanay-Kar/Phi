@@ -131,8 +131,13 @@ class ExpressionParser:
             return value
 
         # Handle opening parenthesis "("
-        elif self.current_token.type == 'LPAREN':
-            raise NotImplementedError('Nested Paranthesis not supported yet')
+        elif self.current_token.type == 'TUPLE':
+            print('TUPLE DETECTED ___________________________', self.current_token.variables)
+            vars = self.current_token.variables
+            vars.append(Token('EOL'))
+            print(ExpressionParserWrapper(vars).parse()[:-1])
+            self.advance()
+            return ExpressionParserWrapper(vars).parse()[0]
 
 
 class ExpressionParserWrapper:
@@ -317,7 +322,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('b = 3 + f(6-7)')
+    lexer = Lexer('a = b + f(x)')
     tokens = lexer.get_tokens()
     # tok = [i for i in tokens]
     # print(tokens)
@@ -328,7 +333,8 @@ if __name__ == '__main__':
         grammar = json.load(f)
     parser = MasterParser(tokens, grammar)
     print(parser.parse())
-    '''lexer = Lexer('x+y,x')
+    '''lexer = Lexer('c-1')
     tokens = lexer.get_tokens()
+    print(tokens)
     epw = ExpressionParserWrapper(tokens)
     print(epw.parse())'''
