@@ -9,7 +9,7 @@ Author: Tanay Kar
 
 ___plot_limit___ = 15 # Change this to change the plot domain
 ___resolution_factor___ = 100 # Change this to change the resolution of the plot
-___graph_theme_dark___ = True # Change this to change the theme of the plot
+___graph_theme_dark___ = False # Change this to change the theme of the plot
 ___bidirectional___ = True # Change this to chose whether to plot the function in negative domain or not
 ___y_scale___ = 'linear' # Change this to change the y scale of the plot
 ___equiscaled___ = True # Change this to make the plot scaled equally in both axes
@@ -21,11 +21,14 @@ import sympy as sp
 import numpy as np
 import inspect
 from matplotlib import pyplot as plt
+import matplotlib as mpl
+from cycler import cycler
 from mpl_interactions import panhandler, zoom_factory
 from ing_theme_matplotlib import mpl_style
 
 table_used = False
 mpl_style(dark={___graph_theme_dark___},minor_ticks=True)
+mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
 
 i = sp.I if {___define_iota___} else 1j
 

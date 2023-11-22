@@ -1,6 +1,4 @@
-func f(x){
-    a = x + 1
-    return a^2
-}
-
-solve f(x)
+f(x) = x
+plot sin(x)
+plot cos(x)
+plot f(x)

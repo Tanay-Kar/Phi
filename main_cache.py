@@ -5,11 +5,14 @@ import sympy as sp
 import numpy as np
 import inspect
 from matplotlib import pyplot as plt
+import matplotlib as mpl
+from cycler import cycler
 from mpl_interactions import panhandler, zoom_factory
 from ing_theme_matplotlib import mpl_style
 
 table_used = False
-mpl_style(dark=True,minor_ticks=True)
+mpl_style(dark=False,minor_ticks=True)
+mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
 
 i = sp.I if False else 1j
 
@@ -78,15 +81,11 @@ def ___solve___(func,func_name,func_str):
                 imag_part = sp.im(root)
                 print(f"x = {real_part:.2f} + {imag_part:.2f}i")
        
-def f(x):
-	a = (x + 1)
-	return (a ** 2)
-	
-x = sp.symbols('x')
+f = lambda x: x
+__plot__(sin,'sin')
+__plot__(cos,'cos')
+__plot__(f,'f')
 
-___create_namespace___()
-___solve___(f(x),'f','f(x)')
-from math import *
 if table_used:
     plt.axhline(y=0, color='grey')
     plt.axvline(x=0, color='grey')
