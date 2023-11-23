@@ -167,5 +167,38 @@
                 "syntax": "SOLVE FUNCTION EOL"
             }
         }
+    },
+    "INTG": {
+        "lexeme": "INTG",
+        "master_id": "J",
+        "function": "Integrate",
+        "syntax": {
+            "syntax_J01": {
+                "spec_id": "J01",
+                "serial": 1,
+                "syntax": "INTG FUNCTION WRT ID EOL"
+            },
+            "syntax_J02": {
+                "spec_id": "J02",
+                "serial": 1,
+                "syntax": "INTG FUNCTION WRT EXPRESSION EOL"
+            },
+            "syntax_J03": {
+                "spec_id": "J03",
+                "serial": 1,
+                "syntax": "INTG FUNCTION WRT FUNCTION EOL"
+            },
+            "syntax_J04": {
+                "spec_id": "J04",
+                "serial": 1,
+                "syntax": "INTG FUNCTION WRT ID FROM VARIABLE TO VARIABLE EOL"
+            },
+            "syntax_J05": {
+                "spec_id": "J05",
+                "serial": 1,
+                "syntax": "INTG FUNCTION WRT ID FROM VARIABLE TO VARIABLE PLT EOL"
+            }
+            
+        }
     }
 }

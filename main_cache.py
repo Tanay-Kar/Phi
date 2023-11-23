@@ -11,7 +11,7 @@ from mpl_interactions import panhandler, zoom_factory
 from ing_theme_matplotlib import mpl_style
 
 table_used = False
-mpl_style(dark=False,minor_ticks=True)
+mpl_style(dark=True,minor_ticks=True)
 mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
 
 i = sp.I if False else 1j
@@ -19,7 +19,7 @@ i = sp.I if False else 1j
 with plt.ioff() :
     fig, ax = plt.subplots()
     
-def __plot__(func,name):
+def __plot__(func,name,integration=False,integration_limits=[0,0]):
     global table_used
     table_used = True
     x = np.linspace(-15, 15, 3000)
@@ -36,6 +36,8 @@ def __plot__(func,name):
             except Exception as e:
                 y[i] = np.nan
     plt.plot(x, y,label=name)
+    if integration:
+        plt.fill_between(x, y, where=((x>integration_limits[0]) & (x<integration_limits[1])), alpha=0.5)
 
 def ___create_namespace___():
     # This is just a helper function to create/destroy a namespace for sympy functions
@@ -51,6 +53,9 @@ def ___create_namespace___():
           
          
 def ___solve___(func,func_name,func_str):
+    
+    print(f'\nSolving {func_str} = {func} ...')
+
     roots = sp.solve(func)
     
     # Separate real and complex roots during iteration
@@ -63,9 +68,7 @@ def ___solve___(func,func_name,func_str):
         else:
             complex_roots.append(root)
 
-    # Print the results
-    print(f'\nSolving {func_str} = {func}')
-    
+    # Print the results    
     if not roots:
         print('No solutions found')
     else:
@@ -80,11 +83,19 @@ def ___solve___(func,func_name,func_str):
                 real_part = sp.re(root)
                 imag_part = sp.im(root)
                 print(f"x = {real_part:.2f} + {imag_part:.2f}i")
+
+def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits=[0,0]):
+    print(f'\nIntegrating {func_str} = {func} with respect to {var} ...')
+    var = sp.Symbol(var)
+    if indefinite:
+        func_integral = sp.integrate(func,var)
+        print(f'\nIntegral of {func_str} = {func_integral}')
+    else:
+        func_integral = sp.integrate(func,(var,integration_limits[0],integration_limits[1]))
+        print(f'\nIntegral of {func_str} from {integration_limits[0]} to {integration_limits[1]} = {func_integral}')
+    
        
-f = lambda x: x
-__plot__(sin,'sin')
-__plot__(cos,'cos')
-__plot__(f,'f')
+f = lambda x: ((1 / 2) * (x ** 2))
 
 if table_used:
     plt.axhline(y=0, color='grey')

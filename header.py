@@ -9,7 +9,7 @@ Author: Tanay Kar
 
 ___plot_limit___ = 15 # Change this to change the plot domain
 ___resolution_factor___ = 100 # Change this to change the resolution of the plot
-___graph_theme_dark___ = False # Change this to change the theme of the plot
+___graph_theme_dark___ = True # Change this to change the theme of the plot
 ___bidirectional___ = True # Change this to chose whether to plot the function in negative domain or not
 ___y_scale___ = 'linear' # Change this to change the y scale of the plot
 ___equiscaled___ = True # Change this to make the plot scaled equally in both axes
@@ -35,10 +35,10 @@ i = sp.I if {___define_iota___} else 1j
 with plt.ioff() :
     fig, ax = plt.subplots()
     
-def __plot__(func,name):
+def __plot__(func,name,integration=False,integration_limits=[0,0]):
     global table_used
     table_used = True
-    x = np.linspace({-___plot_limit___ if ___bidirectional___ else 0}, {___plot_limit___}, {round(2*___plot_limit___*___resolution_factor___)})
+    x = np.linspace(-15, 15, 3000)
     try:
         y = np.vectorize(func)(x)
         
@@ -52,6 +52,8 @@ def __plot__(func,name):
             except Exception as e:
                 y[i] = np.nan
     plt.plot(x, y,label=name)
+    if integration:
+        plt.fill_between(x, y, where=((x>integration_limits[0]) & (x<integration_limits[1])), alpha=0.5)
 
 def ___create_namespace___():
     # This is just a helper function to create/destroy a namespace for sympy functions
@@ -67,6 +69,9 @@ def ___create_namespace___():
           
          
 def ___solve___(func,func_name,func_str):
+    
+    print(f'\\nSolving {{func_str}} = {{func}} ...')
+
     roots = sp.solve(func)
     
     # Separate real and complex roots during iteration
@@ -79,9 +84,7 @@ def ___solve___(func,func_name,func_str):
         else:
             complex_roots.append(root)
 
-    # Print the results
-    print(f'\\nSolving {{func_str}} = {{func}}')
-    
+    # Print the results    
     if not roots:
         print('No solutions found')
     else:
@@ -96,6 +99,17 @@ def ___solve___(func,func_name,func_str):
                 real_part = sp.re(root)
                 imag_part = sp.im(root)
                 print(f"x = {{real_part:.2f}} + {{imag_part:.2f}}i")
+
+def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits=[0,0]):
+    print(f'\\nIntegrating {{func_str}} = {{func}} with respect to {{var}} ...')
+    var = sp.Symbol(var)
+    if indefinite:
+        func_integral = sp.integrate(func,var)
+        print(f'\\nIntegral of {{func_str}} = {{func_integral}}')
+    else:
+        func_integral = sp.integrate(func,(var,integration_limits[0],integration_limits[1]))
+        print(f'\\nIntegral of {{func_str}} from {{integration_limits[0]}} to {{integration_limits[1]}} = {{func_integral}}')
+    
        
 '''
 

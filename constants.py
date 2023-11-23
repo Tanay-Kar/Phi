@@ -32,6 +32,10 @@ keywords = {
     'return': 'RETURN',
     'plot': 'PLT',
     'solve': 'SOLVE',
+    'integrate': 'INTG',
+    'wrt': 'WRT',
+    'from': 'FROM',
+    'to': 'TO',
 }
 
 # multiline definitions end with '{' and inline definitions are self-contained
@@ -43,9 +47,10 @@ class Token:
     def __init__(self, type, value=None):
         self.type = type
         self.value = value if value else type
-
+        if self.type == 'ID' or self.type == 'NUMBER':
+            self.base_type = 'VARIABLE'
     def __str__(self):
-        return f"< Token {self.type} :: '{self.value}' >" if self.value else f'< Token {self.type} >'
+        return f"< Token {self.type} :: '{self.value}' >' if self.value else f'< Token {self.type} >"
 
     def __repr__(self):
         return self.__str__()
@@ -68,13 +73,13 @@ class TupleToken(Token):
 
 class BinOpNode:
     def __init__(self, left, operator, right):
-        self.type = "BINOP"
+        self.type = 'BINOP'
         self.left = left
         self.operator = operator
         self.right = right
 
     def __str__(self) -> str:
-        return f"({self.left} {self.operator} {self.right})"
+        return f'({self.left} {self.operator} {self.right})'
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -82,7 +87,7 @@ class BinOpNode:
 
 class FactorNode:
     def __init__(self, value, sign='+'):
-        self.type = "FACTOR"
+        self.type = 'FACTOR'
         if sign == '-':
             self.value = value.value
         else:
@@ -90,7 +95,7 @@ class FactorNode:
         self.sign = sign
 
     def __str__(self) -> str:
-        return f"<FACTOR {self.value} sign={self.sign}>"
+        return f'<FACTOR {self.value} sign={self.sign}>'
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -98,14 +103,15 @@ class FactorNode:
 
 class ExpressionNode:
     def __init__(self, expression, type_hint=None):
-        self.type = "EXPRESSION"
+        self.type = 'EXPRESSION'
+        self.base_type = 'VARIABLE'
         self.expression = expression
         # Used for a special case when the expression is a single number
         self.type_hint = type_hint
         self.value = self.expression
 
     def __str__(self) -> str:
-        return f"< Expression {self.expression}>"
+        return f'< Expression {self.expression}>'
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -113,13 +119,14 @@ class ExpressionNode:
 
 class DeclarationNode:
     def __init__(self, func: Token, args: TupleToken):
-        self.type = "FUNCTION"
+        self.type = 'FUNCTION'
+        self.base_type = 'VARIABLE'
         self.function_name = func.value
         self.args = args
         self.value = self.function_name,self.args.values
 
     def __str__(self):
-        return f"< Function {self.function_name} args {self.args.variables}>"
+        return f'< Function {self.function_name} args {self.args.variables}>'
 
     def __repr__(self):
         return self.__str__()
@@ -127,7 +134,7 @@ class DeclarationNode:
 
 class LineNode:
     def __init__(self, tokens: list, specid: str, primarykeyword: str, grammar: dict):
-        self.type = "LINE"
+        self.type = 'LINE'
         self.tokens = tokens
         self.grammar = grammar
         self.mastergrammar = specid
@@ -135,7 +142,7 @@ class LineNode:
         self.function = self.grammar[self.primarykeyword]['function']
 
     def __str__(self) -> str:
-        return f"[LINE grammar {self.mastergrammar[0]}:{self.mastergrammar[0:]} <Contents{self.tokens}>]"
+        return f'[LINE grammar {self.mastergrammar[0]}:{self.mastergrammar[0:]} <Contents{self.tokens}>]'
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -145,19 +152,19 @@ class LineNode:
 
 class AssignmentBlock:
     def __init__(self, variable, value) -> None:
-        self.type = "ASSIGN"
+        self.type = 'ASSIGN'
         self.variable = variable
         self.value = value
 
     def __str__(self) -> str:
-        return f"[Assignment Block {self.variable} = {self.value}]"
+        return f'[Assignment Block {self.variable} = {self.value}]'
 
     def __repr__(self) -> str:
         return self.__str__()
     
 class FunctionDeclarationBlock:
     def __init__(self,function,mode:FuncMode,commands=None) -> None:
-        self.type = "FUNCDCLR"
+        self.type = 'FUNCDCLR'
         self.function = function
         self.mode = mode
         self.commands = commands if commands else []
@@ -170,40 +177,40 @@ class FunctionDeclarationBlock:
     
 class PrintBlock:
     def __init__(self,expression) -> None:
-        self.type = "PRINT"
+        self.type = 'PRINT'
         self.expression = expression
         
     def __str__(self) -> str:
-        return f"[Print Block {self.expression}]"
+        return f'[Print Block {self.expression}]'
 
     def __repr__(self) -> str:
         return self.__str__()
     
 class ReturnBlock:
     def __init__(self,expression) -> None:
-        self.type = "RETURN"
+        self.type = 'RETURN'
         self.expression = expression
     
     def __str__(self) -> str:
-        return f"[Return Block {self.expression}]"
+        return f'[Return Block {self.expression}]'
 
     def __repr__(self) -> str:
         return self.__str__()
 
 class EndFuncBlock:
     def __init__(self) -> None:
-        self.type = "ENDFUNC"
+        self.type = 'ENDFUNC'
         pass
 
     def __str(self) -> str:
-        return f"[EndFunc Block]"
+        return f'[EndFunc Block]'
     
     def __repr__(self) -> str:
         return self.__str__()
     
 class ShowTableBlock:
     def __init__(self,function,num=None) -> None:
-        self.type = "SHWTBL"
+        self.type = 'SHWTBL'
         self.function = function
         self.num = num
         
@@ -215,22 +222,23 @@ class ShowTableBlock:
 
 class SolveBlock:
     def __init__(self,function) -> None:
-        self.type = "SOLVE"
+        self.type = 'SOLVE'
         self.function = function
         
     def __str__(self) -> str:
-        return f"[Solve Block {self.function}]"
+        return f'[Solve Block {self.function}]'
     
     def __repr__(self) -> str:
         return self.__str__()
 
 class PlotBlock:
     def __init__(self,function) -> None:
-        self.type = "PLOT"
+        self.type = 'PLOT'
         self.function = function
     
     def __str__(self) -> str:
-        return f"[Plot Block {self.function}]"
+        return f'[Plot Block {self.function}]'
 
     def __repr__(self) -> str:
         return self.__str__()
+    

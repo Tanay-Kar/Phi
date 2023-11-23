@@ -331,7 +331,7 @@ class MasterParser:
 
             if self.enforce_grammar:
                 if self.get_item(i, self.applicable_rules[0]) != None:
-                    if self.get_item(i, self.applicable_rules[0]) == self.tokens[i].type or self.get_item(i, self.applicable_rules[0]) == getattr(self.tokens[i], 'type_hint', None):
+                    if self.get_item(i, self.applicable_rules[0]) == self.tokens[i].type or self.get_item(i, self.applicable_rules[0]) == getattr(self.tokens[i], 'type_hint', None) or self.get_item(i, self.applicable_rules[0]) == getattr(self.tokens[i], 'base_type', None):
                         pass
                     else:
                         if self.get_item(i, self.applicable_rules[0]) == 'EOL':
@@ -347,7 +347,7 @@ class MasterParser:
                 for j in range(len(self.applicable_rules)):
                     rule = self.applicable_rules[j]
                     id = self.rule_ids[j]
-                    if self.get_item(i, rule) == self.tokens[i].type or self.get_item(i, rule) == getattr(self.tokens[i], 'type_hint', None):
+                    if self.get_item(i, rule) == self.tokens[i].type or self.get_item(i, rule) == getattr(self.tokens[i], 'type_hint', None)  or self.get_item(i, rule) == getattr(self.tokens[i], 'base_type', None):
                         rules.append(rule)
                         rules_id.append(id)
                 self.applicable_rules = rules
@@ -363,6 +363,7 @@ class MasterParser:
         self.grammer_match()
         line = LineNode(self.tokens, self.absolute_rule_id,
                         self.primary_keyword, self.grammar_raw)
+        print(line)
         return line
 
 
@@ -370,7 +371,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('x = a + 3(a+1)')
+    lexer = Lexer('f(x) = g(a)')
     tokens = lexer.get_tokens()
     print(tokens)
     with open('grammar.json', 'r') as f:
