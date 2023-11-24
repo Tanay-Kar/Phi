@@ -8,6 +8,7 @@ Author: Tanay Kar
 """
 
 from pyparsing import alphanums
+from sympy import plot
 from analyser import SpecificAnalyser
 import header
 from read import read_file
@@ -121,7 +122,7 @@ class Compiler:
             limits = [self.compile_expr(i) for i in self.current_line.limits]
         else:
             limits = None
-            
+        plot_code = ""    
         if self.current_line.to_plot:
             plot_code = f"__plot__({name},'{func}',integration=True,{'integration_limits=[%s,%s]'%(limits[0],limits[1]) if limits else 'integration_limits=calculated'})"
             
@@ -159,7 +160,7 @@ class Compiler:
 
         name = self.compile_function(self.current_line.function, "NAME")
         call = self.compile_function(self.current_line.function, "CALL")
-        code = f"__plot__({name},{call})\n"
+        code = f"__plot__({name},'{call}')\n"
         self.precompiled_code += code
 
     def compile_return(self):

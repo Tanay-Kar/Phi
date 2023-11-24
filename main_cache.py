@@ -97,12 +97,25 @@ def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits
         print(f'\nIntegral of {func_str} from {integration_limits[0]} to {integration_limits[1]} = {func_integral}')
     
        
-f = lambda x: ((1 / 2) * (x ** 2))
-__plot__(f,'f(x)',integration=True,integration_limits=[-1,0])
+__plot__(sin,'sin(x)',integration=True,integration_limits=[0,pi])
 x = sp.Symbol('x')
 
 __create_namespace__()
-__integrate__(f(x),'f','f(x)','x',indefinite=False,integration_limits=[-1,0])
+__integrate__(sin(x),'sin','sin(x)','x',indefinite=False,integration_limits=[0,pi])
+
+from math import *
+__plot__(cos,'cos(x)',integration=True,integration_limits=[0,pi])
+x = sp.Symbol('x')
+
+__create_namespace__()
+__integrate__(cos(x),'cos','cos(x)','x',indefinite=False,integration_limits=[0,pi])
+
+from math import *
+__plot__(tan,'tan(x)',integration=True,integration_limits=[0,pi])
+x = sp.Symbol('x')
+
+__create_namespace__()
+__integrate__(tan(x),'tan','tan(x)','x',indefinite=False,integration_limits=[0,pi])
 
 from math import *
 

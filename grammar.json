@@ -184,7 +184,7 @@
                 "syntax": "INTG FUNCTION WRT VARIABLE PLT EOL"
             },
             "syntax_J03": {
-                "spec_id": "J04",
+                "spec_id": "J03",
                 "serial": 3,
                 "syntax": "INTG FUNCTION WRT ID FROM VARIABLE TO VARIABLE EOL"
             },
