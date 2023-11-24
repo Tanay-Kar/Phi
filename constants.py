@@ -50,7 +50,7 @@ class Token:
         if self.type == 'ID' or self.type == 'NUMBER':
             self.base_type = 'VARIABLE'
     def __str__(self):
-        return f"< Token {self.type} :: '{self.value}' >' if self.value else f'< Token {self.type} >"
+        return f"< Token {self.type} :: '{self.value}' >" if self.value else f"< Token {self.type} >"
 
     def __repr__(self):
         return self.__str__()
@@ -242,3 +242,20 @@ class PlotBlock:
     def __repr__(self) -> str:
         return self.__str__()
     
+class IntegrateBlock:
+    def __init__(self,function,var,limits=None,plot=False) -> None:
+        self.type = 'INTEGRATE'
+        self.function = function
+        self.var = var
+        self.to_plot = plot
+        self.limits = limits
+        if limits:
+            self.definite = True
+        else:
+            self.definite = False
+        
+    def __str__(self) -> str:
+        return f"[Integrate Block {self.function} {self.limits if self.definite else ''}]"
+    
+    def __repr__(self) -> str:
+        return self.__str__()

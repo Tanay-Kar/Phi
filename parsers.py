@@ -43,7 +43,7 @@ class ExpressionParser:
                 parsed = parsed.value
                 return parsed
             if parsed.value.type == 'NUMBER':
-                parsed = parsed.value.value
+                parsed = parsed.value.value if parsed.sign != '-' else f'-{parsed.value.value}'
                 return ExpressionNode(parsed, type_hint='NUM')
 
         elif not parsed:
@@ -363,7 +363,6 @@ class MasterParser:
         self.grammer_match()
         line = LineNode(self.tokens, self.absolute_rule_id,
                         self.primary_keyword, self.grammar_raw)
-        print(line)
         return line
 
 
@@ -371,7 +370,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('f(x) = g(a)')
+    lexer = Lexer('integrate f(x) wrt x from -2 to 1')
     tokens = lexer.get_tokens()
     print(tokens)
     with open('grammar.json', 'r') as f:

@@ -72,6 +72,34 @@ class SpecificAnalyser:
                     self.specicific_ast.append(const.SolveBlock(
                         function=i.tokens[1],
                     ))
+                case 'J':
+                    if i.mastergrammar == 'J01':
+                        self.specicific_ast.append(const.IntegrateBlock(
+                            function=i.tokens[1],
+                            var=i.tokens[3],
+                        ))
+                    elif i.mastergrammar == 'J02':
+                        self.specicific_ast.append(const.IntegrateBlock(
+                            function=i.tokens[1],
+                            var=i.tokens[3],
+                            plot=True,
+                        ))
+                    elif i.mastergrammar == 'J03':
+                        self.specicific_ast.append(const.IntegrateBlock(
+                            function=i.tokens[1],
+                            var=i.tokens[3],
+                            limits=[i.tokens[5],i.tokens[7]],
+                        ))
+                    elif i.mastergrammar == 'J04':
+                        self.specicific_ast.append(const.IntegrateBlock(
+                            function=i.tokens[1],
+                            var=i.tokens[3],
+                            limits=[i.tokens[5],i.tokens[7]],
+                            plot=True,
+                        ))
+                    else:
+                        # Incase I add anymore grammer rules to 'J'
+                        pass  
 
 
 

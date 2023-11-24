@@ -7,6 +7,7 @@ Author: Tanay Kar
 ----------------
 """
 
+from pyparsing import alphanums
 from analyser import SpecificAnalyser
 import header
 from read import read_file
@@ -100,6 +101,8 @@ class Compiler:
                     self.compile_showtable()
                 case "SOLVE":
                     self.compile_solve()
+                case "INTEGRATE":
+                    self.compile_integrate()
             self.advance()
         if self.block:
             return self.precompiled_code
@@ -108,10 +111,28 @@ class Compiler:
             f.write(self.precompiled_code)
         return self.precompile_temp
 
+    def compile_integrate(self):
+        """Compiles the integrate command"""
+        func = self.compile_function(self.current_line.function, "CALL")
+        name = self.compile_function(self.current_line.function, "NAME")
+        var = self.compile_expr(self.current_line.var)
+        arg_def = f"{var} = sp.Symbol('{var}')\n"
+        if self.current_line.definite:
+            limits = [self.compile_expr(i) for i in self.current_line.limits]
+        else:
+            limits = None
+            
+        if self.current_line.to_plot:
+            plot_code = f"__plot__({name},'{func}',integration=True,{'integration_limits=[%s,%s]'%(limits[0],limits[1]) if limits else 'integration_limits=calculated'})"
+            
+        code = f"{plot_code}\n{arg_def}\n__create_namespace__()\n__integrate__({func},'{name}','{func}','{var}',{'indefinite=True' if not limits else 'indefinite=False,integration_limits=[%s,%s]'%(limits[0],limits[1])})\n\nfrom math import *\n"
+        
+        self.precompiled_code += code
+
     def compile_solve(self):
         """Compiles the solve command"""
-        
-        _ = self.compile_function(self.current_line.function, "DCLR")
+
+        _ = self.compile_function(self.current_line.function, "DCLR") # Ensures that the function has single variable(s) as arguments
         name = self.compile_function(self.current_line.function, "NAME")
         args = self.compile_function(self.current_line.function, "ARGS")
         if len(args) == 0:
@@ -125,38 +146,39 @@ class Compiler:
             arg_def += f"{i} = sp.symbols('{i}')\n"
 
         func_call = f'{name}({",".join(args)})'
-        code = f"{arg_def}\n___create_namespace___()\n___solve___({func_call},'{name}','{func_call}')\nfrom math import *"
+        code = f"{arg_def}\n__create_namespace__()\n__solve__({func_call},'{name}','{func_call}')\nfrom math import *\n"
         self.precompiled_code += code
 
     def compile_showtable(self):
         """Compiles the showtable command"""
-        
+
         raise NotImplementedError("Show Table not implemented yet")
 
     def compile_plot(self):
         """Compiles the plot command"""
-        
+
         name = self.compile_function(self.current_line.function, "NAME")
-        code = f"__plot__({name},'{name}')\n"
+        call = self.compile_function(self.current_line.function, "CALL")
+        code = f"__plot__({name},{call})\n"
         self.precompiled_code += code
 
     def compile_return(self):
         """Compiles the return command"""
-        
+
         expr = self.compile_expr(self.current_line.expression)
         code = f"return {expr}\n"
         self.precompiled_code += code
 
     def compile_print(self):
         """Compiles the print command"""
-        
+
         expr = self.compile_expr(self.current_line.expression)
         code = f"\nprint({expr})\n"
         self.precompiled_code += code
 
     def compile_assignment(self):
         """Compiles the assignment command"""
-        
+
         variable = self.current_line.variable.value
         value = self.compile_expr(self.current_line.value)
         code = f"{variable} = {value}\n"
@@ -164,7 +186,7 @@ class Compiler:
 
     def compile_function_multiline(self):
         """Compiles the multiline function"""
-        
+
         function = self.current_line.function
         command = []
         self.advance()
@@ -172,7 +194,7 @@ class Compiler:
             if i.type == "ENDFUNC":
                 command_code = Compiler(ast=command).compile()
                 command_code = "\t" + command_code.replace("\n", "\n\t")
-                code = f"""def {self.compile_function(function,"FORM")}:\n{command_code}\n"""
+                code = f"""def {self.compile_function(function,"CALL")}:\n{command_code}\n"""
                 self.precompiled_code += code
                 return
 
@@ -183,7 +205,7 @@ class Compiler:
 
     def compile_function_inline(self):
         """Compiles the inline function"""
-        
+
         function = self.current_line.function
         command = self.current_line.commands
         code = (
@@ -193,7 +215,7 @@ class Compiler:
 
     def compile_function(self, func, type: func_comp_type):
         """Actual function compiler, forms root for the other function-compilers"""
-        
+
         name = func.function_name
         args = func.args.values
         # Tuple check
@@ -238,17 +260,7 @@ class Compiler:
                     com = self.compile_expr(i)
                     arg_com += com + ","
                 return f"{name}({arg_com[:-1]})"
-
-        elif type == "FORM":
-            arg_com = ""
-            if len(args) == 1:
-                arg_com = self.compile_expr(args[0][0])
-                return f"{name}({arg_com})"
-            else:
-                for i in args:
-                    com = self.compile_expr(i)
-                    arg_com += com + ","
-                return f"{name}({arg_com[:-1]})"
+            
         elif type == "NAME":
             return name
         elif type == "ARGS":
@@ -256,7 +268,7 @@ class Compiler:
 
     def compile_expr(self, expr):
         """Compiles an expression"""
-        
+
         match expr.type:
             case "ID":
                 return expr.value
@@ -274,7 +286,7 @@ class Compiler:
 
     def compile_binop(self, l, op, r):
         """Compiles a binary operation"""
-        
+
         if r == None:
             raise ValueError("Right side of expression cannot be None")
 

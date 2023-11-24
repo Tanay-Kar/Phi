@@ -53,9 +53,11 @@ def __plot__(func,name,integration=False,integration_limits=[0,0]):
                 y[i] = np.nan
     plt.plot(x, y,label=name)
     if integration:
+        if integration_limits == "calculated":
+            integration_limits = [min(x),max(x)]
         plt.fill_between(x, y, where=((x>integration_limits[0]) & (x<integration_limits[1])), alpha=0.5)
 
-def ___create_namespace___():
+def __create_namespace__():
     # This is just a helper function to create/destroy a namespace for sympy functions
     # In other words , this is just a tranquilizer for sympy's overly sensitive namespace
     # conflict. It encloses all the sympy dependent functions and forms a blanket namespace
@@ -68,7 +70,7 @@ def ___create_namespace___():
         globals()[name] = getattr(sp, name) 
           
          
-def ___solve___(func,func_name,func_str):
+def __solve__(func,func_name,func_str):
     
     print(f'\\nSolving {{func_str}} = {{func}} ...')
 
