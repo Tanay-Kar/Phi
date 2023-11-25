@@ -14,6 +14,9 @@ ___bidirectional___ = True # Change this to chose whether to plot the function i
 ___y_scale___ = 'linear' # Change this to change the y scale of the plot
 ___equiscaled___ = True # Change this to make the plot scaled equally in both axes
 ___define_iota___ = False # Change this to define iota as a constant
+from sys import modules
+
+
 header = f'''
 from math import *
 import math
@@ -25,7 +28,9 @@ import matplotlib as mpl
 from cycler import cycler
 from mpl_interactions import panhandler, zoom_factory
 from ing_theme_matplotlib import mpl_style
+'''
 
+modules = f'''
 table_used = False
 mpl_style(dark={___graph_theme_dark___},minor_ticks=True)
 mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
@@ -111,9 +116,14 @@ def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits
     else:
         func_integral = sp.integrate(func,(var,integration_limits[0],integration_limits[1]))
         print(f'\\nIntegral of {{func_str}} from {{integration_limits[0]}} to {{integration_limits[1]}} = {{func_integral}}')
-    
-       
-'''
+
+def __eqsolve__(eq_set,var_set): 
+    print(f'\\nSolving {{eq_set}} for {{var_set}} ...')
+    roots = sp.solve(eq_set,var_set)
+    print(f'\\n{{roots}}')
+      
+'''      
+
 
 
 footer = f'''

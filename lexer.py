@@ -91,6 +91,8 @@ class Lexer:
                 self.token_corpus.append(Token('LBRACE'))
             elif self.assert_char(self.char, r_rBrace):
                 self.token_corpus.append(Token('RBRACE'))
+            elif self.assert_char(self.char, r_Colon):
+                self.token_corpus.append(Token('COLON'))
 
             elif self.char == ' ':
                 pass

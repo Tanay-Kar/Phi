@@ -1,3 +1,5 @@
-integrate sin(x) wrt x from 0 to pi plot
-integrate cos(x) wrt x from 0 to pi plot
-integrate tan(x) wrt x from 0 to pi plot
+eq1: x + y = 5
+
+eq2: x - y = 7
+
+solve (eq1,eq2) for (x,y)

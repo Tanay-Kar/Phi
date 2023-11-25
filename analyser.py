@@ -7,6 +7,7 @@ Author: Tanay Kar
 ----------------
 '''
 
+from pyrsistent import v
 import constants as const
 
 class SpecificAnalyser:
@@ -19,10 +20,20 @@ class SpecificAnalyser:
         for i in self.ast:
             match i.mastergrammar[0]:
                 case 'A':
-                    self.specicific_ast.append(const.AssignmentBlock(
-                        variable=i.tokens[0],
-                        value=i.tokens[2]
-                        ))
+                    if i.mastergrammar == 'A01':
+                        self.specicific_ast.append(const.AssignmentBlock(
+                            variable=i.tokens[0],
+                            value=i.tokens[2]
+                            ))
+                    elif i.mastergrammar == 'A02':
+                        self.specicific_ast.append(const.EquationBlock(
+                            name=i.tokens[0],
+                            lhs=i.tokens[2],
+                            rhs=i.tokens[4],
+                            ))
+                    else:
+                        # Incase I add anymore grammer rules to 'A'
+                        pass
                 case 'B':
                     if i.mastergrammar in ('B01', 'B02','B03'):
                         self.specicific_ast.append(const.FunctionDeclarationBlock(
@@ -69,9 +80,19 @@ class SpecificAnalyser:
                         function=i.tokens[1],
                     ))
                 case 'I':
-                    self.specicific_ast.append(const.SolveBlock(
-                        function=i.tokens[1],
-                    ))
+                    if i.mastergrammar == 'I01':
+                        self.specicific_ast.append(const.SolveBlock(
+                            function=i.tokens[1],
+                        ))
+                    elif i.mastergrammar == 'I02':
+                        self.specicific_ast.append(const.EquationSolveBlock(
+                            eq=i.tokens[1],
+                            var=i.tokens[3],
+                            ))
+                    else:
+                        # Incase I add anymore grammer rules to 'I'
+                        pass
+                    
                 case 'J':
                     if i.mastergrammar == 'J01':
                         self.specicific_ast.append(const.IntegrateBlock(

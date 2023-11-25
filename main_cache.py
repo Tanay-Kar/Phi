@@ -95,28 +95,19 @@ def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits
     else:
         func_integral = sp.integrate(func,(var,integration_limits[0],integration_limits[1]))
         print(f'\nIntegral of {func_str} from {integration_limits[0]} to {integration_limits[1]} = {func_integral}')
-    
-       
-__plot__(sin,'sin(x)',integration=True,integration_limits=[0,pi])
+
+def __eqsolve__(eq_set,var_set): 
+    print(f'\nSolving {eq_set} for {var_set} ...')
+    roots = sp.solve(eq_set,var_set)
+    print(f'\n{roots}')
+      
 x = sp.Symbol('x')
+y = sp.Symbol('y')
 
+eq1 = sp.Eq((x + y),5)
+eq2 = sp.Eq((x - y),7)
 __create_namespace__()
-__integrate__(sin(x),'sin','sin(x)','x',indefinite=False,integration_limits=[0,pi])
-
-from math import *
-__plot__(cos,'cos(x)',integration=True,integration_limits=[0,pi])
-x = sp.Symbol('x')
-
-__create_namespace__()
-__integrate__(cos(x),'cos','cos(x)','x',indefinite=False,integration_limits=[0,pi])
-
-from math import *
-__plot__(tan,'tan(x)',integration=True,integration_limits=[0,pi])
-x = sp.Symbol('x')
-
-__create_namespace__()
-__integrate__(tan(x),'tan','tan(x)','x',indefinite=False,integration_limits=[0,pi])
-
+__eqsolve__((eq1,eq2),(x,y))
 from math import *
 
 if table_used:

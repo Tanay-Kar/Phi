@@ -370,7 +370,7 @@ if __name__ == '__main__':
     from lexer import Lexer
     import json
 
-    lexer = Lexer('integrate f(x) wrt x from -2 to 1')
+    lexer = Lexer('solve (eq1,eq2) for (x,y)')
     tokens = lexer.get_tokens()
     print(tokens)
     with open('grammar.json', 'r') as f:

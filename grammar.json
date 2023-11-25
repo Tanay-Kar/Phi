@@ -2,22 +2,17 @@
     "ID": {
         "lexeme": "ID",
         "master_id": "A",
-        "function": "Assignment",
+        "function": "Assignment & Equations",
         "syntax": {
             "syntax_A01": {
                 "spec_id": "A01",
                 "serial": 1,
-                "syntax": "ID ASSIGN EXPRESSION EOL"
+                "syntax": "ID ASSIGN VARIABLE EOL"
             },
             "syntax_A02": {
                 "spec_id": "A02",
                 "serial": 2,
-                "syntax": "ID ASSIGN ID EOL"
-            },
-            "syntax_A03": {
-                "spec_id": "A03",
-                "serial": 3,
-                "syntax": "ID ASSIGN FUNCTION EOL"
+                "syntax": "ID COLON VARIABLE ASSIGN VARIABLE EOL"
             }
         }
     },
@@ -48,7 +43,7 @@
             }
         }
     },
-    "FUNCTION":{
+    "FUNCTION": {
         "lexeme": "FUNCTION",
         "master_id": "C",
         "function": "Function Declaration",
@@ -69,7 +64,6 @@
                 "syntax": "FUNCTION ASSIGN FUNCTION EOL"
             }
         }
-
     },
     "PRINT": {
         "lexeme": "PRINT",
@@ -165,6 +159,11 @@
                 "spec_id": "I01",
                 "serial": 1,
                 "syntax": "SOLVE FUNCTION EOL"
+            },
+            "syntax_I02": {
+                "spec_id": "I02",
+                "serial": 2,
+                "syntax": "SOLVE TUPLE FOR TUPLE EOL"
             }
         }
     },
@@ -193,7 +192,6 @@
                 "serial": 4,
                 "syntax": "INTG FUNCTION WRT ID FROM VARIABLE TO VARIABLE PLT EOL"
             }
-            
         }
     }
 }

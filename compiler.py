@@ -8,7 +8,7 @@ Author: Tanay Kar
 """
 
 from pyparsing import alphanums
-from sympy import plot
+from sympy import simplify
 from analyser import SpecificAnalyser
 import header
 from read import read_file
@@ -67,8 +67,9 @@ class Compiler:
         self.as_repr = repr
         self.precompiled_code = ""
         if not self.block:
-            self.precompiled_code += header.header
+            
             self.precompile_temp = file_name.split(".")[0] + "_cache.py"
+        self.var_list = []
         self.line_no = -1
         self.current_line = None
         self.advance()
@@ -87,6 +88,8 @@ class Compiler:
             match self.current_line.type:
                 case "ASSIGN":
                     self.compile_assignment()
+                case "EQUATION":
+                    self.compile_equation()
                 case "FUNCDCLR":
                     if self.current_line.mode == "multiline":
                         self.compile_function_multiline()
@@ -104,13 +107,50 @@ class Compiler:
                     self.compile_solve()
                 case "INTEGRATE":
                     self.compile_integrate()
+                case "EQSOLVE":
+                    self.compile_eqsolve()
+
             self.advance()
         if self.block:
+            self.compile_var_list()
             return self.precompiled_code
         with open(self.precompile_temp, "w") as f:
-            self.precompiled_code += header.footer
+            self.compile_var_list()
+            self.precompiled_code = header.header + header.modules + self.precompiled_code + header.footer
             f.write(self.precompiled_code)
         return self.precompile_temp
+    
+    def compile_var_list(self):
+        """Compiles the var_list"""
+        print('checked')
+        code = ""
+        for i in self.var_list:
+            code += f"{i} = sp.Symbol('{i}')\n"
+        self.precompiled_code = code + '\n' + self.precompiled_code
+        
+    def compile_equation(self):
+        """Compiles the equation command"""
+        name = self.current_line.name
+        lhs = self.compile_expr(self.current_line.lhs)
+        lhsvar = list(simplify(lhs).free_symbols)
+        rhs = self.compile_expr(self.current_line.rhs)
+        rhsvar = list(simplify(rhs).free_symbols)
+        allvars = list(set(lhsvar + rhsvar + self.var_list))
+        print(allvars)
+        self.var_list = allvars
+        code = f"{name} = sp.Eq({lhs},{rhs})\n"
+        self.precompiled_code += code
+
+    def compile_eqsolve(self):
+        """Compiles the eqsolve command"""
+
+        eq = [i.value for i in self.current_line.eq.variables]
+        var_check = all([i.type == "ID" for i in self.current_line.var.variables])
+        if not var_check:
+            raise TypeError("Variables for solve must be of type variable")
+        vars = [i.value for i in self.current_line.var.variables]
+        code = f"__create_namespace__()\n__eqsolve__({'('+','.join(eq)+')'},{'('+','.join(vars)+')'})\nfrom math import *\n"
+        self.precompiled_code += code
 
     def compile_integrate(self):
         """Compiles the integrate command"""
@@ -122,18 +162,20 @@ class Compiler:
             limits = [self.compile_expr(i) for i in self.current_line.limits]
         else:
             limits = None
-        plot_code = ""    
+        plot_code = ""
         if self.current_line.to_plot:
             plot_code = f"__plot__({name},'{func}',integration=True,{'integration_limits=[%s,%s]'%(limits[0],limits[1]) if limits else 'integration_limits=calculated'})"
-            
+
         code = f"{plot_code}\n{arg_def}\n__create_namespace__()\n__integrate__({func},'{name}','{func}','{var}',{'indefinite=True' if not limits else 'indefinite=False,integration_limits=[%s,%s]'%(limits[0],limits[1])})\n\nfrom math import *\n"
-        
+
         self.precompiled_code += code
 
     def compile_solve(self):
         """Compiles the solve command"""
 
-        _ = self.compile_function(self.current_line.function, "DCLR") # Ensures that the function has single variable(s) as arguments
+        _ = self.compile_function(
+            self.current_line.function, "DCLR"
+        )  # Ensures that the function has single variable(s) as arguments
         name = self.compile_function(self.current_line.function, "NAME")
         args = self.compile_function(self.current_line.function, "ARGS")
         if len(args) == 0:
@@ -261,7 +303,7 @@ class Compiler:
                     com = self.compile_expr(i)
                     arg_com += com + ","
                 return f"{name}({arg_com[:-1]})"
-            
+
         elif type == "NAME":
             return name
         elif type == "ARGS":
@@ -331,4 +373,4 @@ if __name__ == "__main__":
 
     compiler = Compiler(file_name="main.phi")
     cache = compiler.compile()
-    os.system(f"python3 {cache}")
+    # os.system(f"python3 {cache}")
