@@ -51,5 +51,11 @@ By default , it executes the file named `main.phi` . You can change the file nam
 
 *Note* : The project is currently in development stage. Later on a dedicated filename-as-argument method will be implemented.
 
-If all steps were followed correctly , the terminal must show the solution of two equations and must give the result of an integration. It should also show a graph plotting the function and the shaded area of integration.
+If all steps were followed correctly , the terminal must show :
+- Solution of two equations
+- Roots of a quadratic function
+- Definite integration of a function
+
+A graph of the function and the shaded area under the curve will be displayed.
+
 

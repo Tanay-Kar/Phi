@@ -123,15 +123,26 @@ def __eqsolve__(eq_set,var_set):
                 print(f'{j} = {i[j]}',sep=' , ')
             print()
 
-y = sp.Symbol('y')
 x = sp.Symbol('x')
-z = sp.Symbol('z')
+y = sp.Symbol('y')
 
-eq1 = sp.Eq((x + z),6)
-eq2 = sp.Eq((x + y),5)
-eq3 = sp.Eq((y + z),7)
+eq1 = sp.Eq(((3 * x) - (4 * y)),5)
+eq2 = sp.Eq(((4 * x) - (3 * y)),10)
 __create_namespace__()
-__eqsolve__((eq1,eq2,eq3),(x,y,z))
+__eqsolve__((eq1,eq2),(x,y))
+from math import *
+f = lambda x: (((x ** 2) + (2 * x)) - 1)
+x = sp.symbols('x')
+
+__create_namespace__()
+__solve__(f(x),'f','f(x)')
+from math import *
+__plot__(f,'f(x)',integration=True,integration_limits=[-1,3])
+x = sp.Symbol('x')
+
+__create_namespace__()
+__integrate__(f(x),'f','f(x)','x',indefinite=False,integration_limits=[-1,3])
+
 from math import *
 
 if table_used:

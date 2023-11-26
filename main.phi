@@ -1,5 +1,12 @@
-eq1 : x + z = 6
-eq2 : x + y = 5
-eq3 : y + z = 7
+eq1 : 3x - 4y = 5
+eq2 : 4x - 3y = 10
 
-solve (eq1, eq2, eq3) for (x, y, z)
+solve (eq1,eq2) for (x,y)
+
+f(x) = x^2 + 2x - 1
+
+solve f(x)
+
+integrate f(x) wrt x from -1 to 3 plot
+
+
