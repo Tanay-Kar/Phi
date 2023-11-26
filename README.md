@@ -41,4 +41,15 @@ cd Phi
 ```
 pip install -r requirements.txt
 ```
+You may need to create a virtual environment before installing the dependencies in some debian distros.
+
+- Run the following command to execute the provided file:
+```
+python compiler.py
+```
+By default , it executes the file named `main.phi` . You can change the file name in the `compiler.py` file.
+
+*Note* : The project is currently in development stage. Later on a dedicated filename-as-argument method will be implemented.
+
+If all steps were followed correctly , the terminal must show the solution of two equations and must give the result of an integration. It should also show a graph plotting the function and the shaded area of integration.
 

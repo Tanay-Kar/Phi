@@ -1,6 +1,7 @@
 
 from math import *
 import math
+import re
 import sympy as sp
 import numpy as np
 import inspect
@@ -100,26 +101,31 @@ def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits
         print(f'\nIntegral of {func_str} from {integration_limits[0]} to {integration_limits[1]} = {func_integral}')
 
 def __eqsolve__(eq_set,var_set): 
-    print(f'\nSolving {eq_set} for {var_set} ...')
-    roots = sp.solve(eq_set,var_set)
-    print(f'\n{roots}')
-
+    print(f'\nSolving {len(eq_set)} equation{"s" if len(eq_set)>1 else ""} for {var_set} ...')
+    for i in eq_set:
+        print(i.lhs,'=',i.rhs)
+    roots = sp.solve(eq_set,var_set,dict=True)
+    if not roots:
+        print('No solutions found')
+        return
+    print('\nSolution set:')
+    if type(roots) == dict:
+        for i in roots:
+            print(f'{i} = {roots[i]}',end=' , ')
+    else:
+        for i in roots:
+            for j in i:
+                print(f'{j} = {i[j]}',end=' , ')
+            print()
 y = sp.Symbol('y')
 x = sp.Symbol('x')
 
-eq1 = sp.Eq(((3 * x) - (4 * y)),19)
-eq2 = sp.Eq(((6 * x) + (2 * y)),10)
+eq1 = sp.Eq(((3 * x) - (2 * y)),14)
+eq2 = sp.Eq(((6 * x) + (4 * y)),10)
 __create_namespace__()
 __eqsolve__((eq1,eq2),(x,y))
 from math import *
-f = lambda x: ((((3 * x) ** 2) + (2 * x)) - 1)
-__plot__(f,'f(x)',integration=True,integration_limits=[-1,2])
-x = sp.Symbol('x')
 
-__create_namespace__()
-__integrate__(f(x),'f','f(x)','x',indefinite=False,integration_limits=[-1,2])
-
-from math import *
 
 if table_used:
     plt.axhline(y=0, color='grey')

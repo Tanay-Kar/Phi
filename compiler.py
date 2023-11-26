@@ -122,7 +122,6 @@ class Compiler:
     
     def compile_var_list(self):
         """Compiles the var_list"""
-        print('checked')
         code = ""
         for i in self.var_list:
             code += f"{i} = sp.Symbol('{i}')\n"
