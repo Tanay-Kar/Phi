@@ -39,7 +39,7 @@ cd Phi
 
 - Install the required dependencies using the following command:
 ```
-pip install -r requirements.txt
+pip install sympy numpy matplotlib mpl-interactions qbstyles ing_theme_matplotlib colorama
 ```
 You may need to create a virtual environment before installing the dependencies in some debian distros.
 
