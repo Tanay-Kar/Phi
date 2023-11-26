@@ -19,6 +19,7 @@ class Lexer:
         self.advance()
 
     def advance(self):
+        # Advance the position pointer and set the current character
         if self.pos < len(self.line) - 1:
             self.pos += 1
             self.char = self.line[self.pos]
@@ -28,15 +29,18 @@ class Lexer:
             self.token_corpus.append(Token('EOL'))
 
     def peek(self):
+        # Return the next character in the line
         return self.line[self.pos + 1] if self.pos < len(self.line) - 1 else 'EOL'
 
     def assert_char(self, char, tokentype):
+        # Asserts if the character matches the token type
         if re.fullmatch(tokentype, char):
             return True
         else:
             return False
 
     def make_number(self):
+        # Constructs a number token by matching it against the Number regex
         num = self.char
         next_char = self.peek()
         while self.assert_char(num+next_char, r_Num) and next_char != 'EOL':
@@ -47,6 +51,7 @@ class Lexer:
         return Token('NUMBER', num)
 
     def make_id(self):
+        # Constructs an ID token by matching it against the ID regex
         if not self.assert_char(self.char, r_ID):
             return
         id = self.char
@@ -62,6 +67,7 @@ class Lexer:
             return Token('ID', id)
 
     def get_tokens(self):
+        # Iterates through the line and constructs tokens corpus
         while self.char != None:
             if self.assert_char(self.char, r_Num):
                 self.token_corpus.append(self.make_number())
@@ -97,6 +103,7 @@ class Lexer:
             elif self.char == ' ':
                 pass
             elif self.char == '\n':
+                # EOL is for End of Line Token
                 self.token_corpus.append(Token('EOL'))
             else:
                 raise Exception(f'Invalid Character: {self.char}')

@@ -1,3 +1,3 @@
-[LINE grammar A:A02 <Contents[< Token ID :: 'eq1' >, < Token COLON :: 'COLON' >, < Expression (<FACTOR < Token ID :: 'x' > sign=+> PLUS <FACTOR < Token ID :: 'y' > sign=+>)>, < Token ASSIGN :: 'ASSIGN' >, < Expression 5>, < Token EOL :: 'EOL' >]>]
+[LINE grammar A:A02 <Contents[< Token ID :: 'eq1' >, < Token COLON :: 'COLON' >, < Expression (<FACTOR < Token ID :: 'x' > sign=+> PLUS <FACTOR < Token ID :: 'y' > sign=+>)>, < Token ASSIGN :: 'ASSIGN' >, < Expression 12>, < Token EOL :: 'EOL' >]>]
 [LINE grammar A:A02 <Contents[< Token ID :: 'eq2' >, < Token COLON :: 'COLON' >, < Expression (<FACTOR < Token ID :: 'x' > sign=+> MINUS <FACTOR < Token ID :: 'y' > sign=+>)>, < Token ASSIGN :: 'ASSIGN' >, < Expression 7>, < Token EOL :: 'EOL' >]>]
 [LINE grammar I:I02 <Contents[< Token SOLVE :: 'SOLVE' >, < Tuple :: < Token ID :: 'eq1' > ,< Token ID :: 'eq2' > >, < Token FOR :: 'FOR' >, < Tuple :: < Token ID :: 'x' > ,< Token ID :: 'y' > >, < Token EOL :: 'EOL' >]>]

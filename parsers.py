@@ -12,6 +12,18 @@ from exceptions import *
 
 
 class ExpressionParser:
+    ''' Parses an expression and returns an ExpressionNode
+    Takes a bare expression and returns the first expression available.
+    For example : x+5,y-8 -> <x+5>
+    
+    Arguments:
+    ----------
+    tokens : list
+    
+    Methods:
+    --------
+    parse() : Parses the expression and returns an ExpressionNode
+    '''
     def __init__(self, tokens):
         self.master_tokens = tokens
         self.tokens = tokens
@@ -21,6 +33,7 @@ class ExpressionParser:
         self.advance()
 
     def advance(self):
+        '''Advance the index and set the current token'''
         while self.index < len(self.tokens):
             self.current_token = self.tokens[self.index]
             self.index += 1
@@ -28,12 +41,15 @@ class ExpressionParser:
                 break
 
     def peek(self):
+        '''Return the next token'''
         return self.tokens[self.index+1] if self.index+1 < len(self.tokens) else None
 
     def return_slice(self):
+        '''Return the start and end index of the expression'''
         return self.startindex, self.endindex
 
     def parse(self):
+        '''Parse the expression'''
         self.startindex = self.index - 1
         parsed = self.parse_expression()
         self.endindex = self.index - 1
@@ -51,6 +67,7 @@ class ExpressionParser:
         return ExpressionNode(parsed)
 
     def parse_expression(self):
+        '''Parse the expression of addition and subtraction'''
         left = self.parse_term()
         while self.current_token.type in ('PLUS', 'MINUS'):
             op = self.current_token.type
@@ -60,6 +77,7 @@ class ExpressionParser:
         return left
 
     def parse_term(self):
+        '''Parse the term of multiplication and division'''
         left = self.parse_radical()
         while self.current_token.type in ('MULT', 'DIV', 'DOT'):
             op = self.current_token.type if self.current_token.type not in (
@@ -71,6 +89,7 @@ class ExpressionParser:
         return left
 
     def parse_radical(self):
+        '''Parse the radical of exponentiation'''
         left = self.parse_factor()
         while self.current_token.type == 'CARET':
             op = self.current_token.type
@@ -81,6 +100,7 @@ class ExpressionParser:
         return left
 
     def parse_factor(self):
+        '''Parse the factor of a number or an identifier or a function or an expression'''
         if self.current_token.type == 'NUMBER':
             value = self.current_token
             self.advance()
@@ -136,6 +156,22 @@ class ExpressionParser:
 
 
 class ExpressionParserWrapper:
+    ''' A wrapper for ExpressionParser that parses a list of expressions
+    Iteratively parses a list of expressions and returns all the expressions in the token corpus.
+    
+    Arguments:
+    ----------
+    tokens : list
+    
+    Methods:
+    --------
+    parse() : Parses the token corpus and returns a combination of ExpressionNode and Token objects
+    
+    Note
+    ----
+    - This class is used to parse a list of expressions. It is not used to parse a single expression.
+    - The token corpus must be succeeded by an 'EOL' token.
+    '''
     def __init__(self, tokens):
         self.index = -1
         self.tokens = tokens
@@ -144,6 +180,7 @@ class ExpressionParserWrapper:
         self.advance()
 
     def advance(self):
+        '''Advance the index and set the current token'''
         while self.index < len(self.tokens):
             self.current_token = self.tokens[self.index]
             self.index += 1
@@ -151,9 +188,11 @@ class ExpressionParserWrapper:
                 break
 
     def return_tokens(self):
+        '''Return the token corpus'''
         return self.tokens
 
     def parse(self):
+        '''Parse the token corpus'''
         while self.current_token.type != "EOL":
             ep = ExpressionParser(self.tokens[self.index-1:])
             pr = ep.parse()
@@ -166,6 +205,21 @@ class ExpressionParserWrapper:
 
 
 class TupleParser:
+    ''' Parses all the tuples and returns a TupleToken in their place
+    Also creates functions nodes and returns them in their place
+    
+    Arguments:
+    ----------
+    tokens : list
+    
+    Methods:
+    --------
+    parse() : Parses the token corpus and returns a combination of ExpressionNode and Token objects
+    
+    Note:
+    -----
+    This class will be updated in its mechanism in the future
+    '''
     def __init__(self, tokens):
         self.tokens = tokens
         self.current_token = tokens[0]
@@ -175,6 +229,7 @@ class TupleParser:
         self.advance()
 
     def advance(self):
+        '''Advance the index and set the current token'''
         self.index += 1
         if self.index < len(self.tokens):
             self.current_token = self.tokens[self.index]
@@ -182,9 +237,11 @@ class TupleParser:
             self.current_token = Token('EOL')
 
     def couplet(self, items, stindex):
+        '''Return a couplet of next two items'''
         return items[stindex], items[stindex+1]
 
     def assert_type(self, token, type, enforceable=False, alt_type=None):
+        '''Assert/Check the type of a token'''
         if token.type not in (type, alt_type):
             if enforceable:
                 raise Exception(self.tokens + '\nExpected token type ' +
@@ -195,6 +252,7 @@ class TupleParser:
             return True
 
     def parse_item(self, items_arg):
+        '''Parse the actual set of tokens and amalgamation of commas'''
         tupletok = TupleToken()
         index = 0
         
@@ -230,10 +288,12 @@ class TupleParser:
             pass  # I have no idea what this block does either 🤷‍♂️
 
     def replace(self, st, end, new_item):
+        '''Replace a set of tokens with a new token'''
         self.tokens[st:end] = [new_item]
         self.index = st
 
     def parse(self):
+        '''Parse the token corpus'''
         t_items = []
         while self.index < len(self.tokens):
             if self.current_token.type == 'LPAREN':
@@ -259,6 +319,7 @@ class TupleParser:
         return self.tokens
 
     def parse_declarations(self):
+        '''Parse functions and replace them with a DeclarationNode'''
         self.index = -1
         while self.index < len(self.tokens):
             if self.current_token and self.current_token.type == 'ID' and self.index + 1 < len(self.tokens) and self.tokens[self.index+1].type == 'TUPLE':
@@ -268,6 +329,7 @@ class TupleParser:
             self.advance()
 
     def reverse_expr_parse(self):
+        '''Reverse the expression parsing if the tuple is not a function'''
         self.index = -1
         while self.index < len(self.tokens):
             if self.current_token.type == 'TUPLE' and len(self.current_token.variables) == 1:
@@ -276,6 +338,23 @@ class TupleParser:
 
 
 class MasterParser:
+    ''' Grammer Parser . Ensures overall syntax is correct with the help of a grammar file
+    Takes a list of tokens and a grammar file and returns a LineNode matching the tokens.
+    Iteratively goes through the corpus , and checks for a specific rule that the corpus matches.
+    
+    Arguments:
+    ----------
+    tokens : list
+    grammar : dict
+    
+    Methods:
+    --------
+    parse() : Parses the token corpus and returns a LineNode object
+    
+    Note:
+    -----
+    The grammar file can be modified to add new rules and syntaxes.
+    '''
     def __init__(self, tokens, grammar: dict):
         self.tokens = tokens
         self.prepare()
@@ -289,16 +368,19 @@ class MasterParser:
         self.advance()
 
     def prepare(self):
+        '''Prepare the token corpus for parsing'''
         tok = TupleParser(self.tokens).parse()        
         tok = ExpressionParserWrapper(tok).parse()
         self.tokens = tok
 
     def reset_index(self):
+        '''Reset the index and current token'''
         self.index = -1
         self.current_token: Token = None
         self.advance()
 
     def advance(self):
+        '''Advance the index and set the current token'''
         while self.index < len(self.tokens):
             self.current_token = self.tokens[self.index]
             self.index += 1
@@ -306,6 +388,7 @@ class MasterParser:
                 break
 
     def get_master_rule(self):
+        '''Get the master rule for the token corpus on the basis of the first token type'''
         first_token_type = self.current_token.type
         self.primary_keyword = first_token_type
         if first_token_type in self.grammar_raw:
@@ -318,12 +401,14 @@ class MasterParser:
                              ]
 
     def get_item(self, index, list):
+        '''Get the item at a specific index in a list'''
         if index < len(list):
             return list[index]
         else:
             return None
 
     def grammer_match(self):
+        '''Match the token corpus with the applicable rules'''
         for i in range(len(self.tokens)):
             self.enforce_grammar = True if len(
                 self.applicable_rules) == 1 else False
@@ -359,6 +444,7 @@ class MasterParser:
             self.absolute_rule_id = self.rule_ids[0]
 
     def parse(self):
+        '''Wrapper function for all the parsing methods'''
         self.get_master_rule()
         self.grammer_match()
         line = LineNode(self.tokens, self.absolute_rule_id,

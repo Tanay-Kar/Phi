@@ -69,12 +69,13 @@ class Compiler:
         if not self.block:
             
             self.precompile_temp = file_name.split(".")[0] + "_cache.py"
-        self.var_list = []
+        self.var_list = [] # Keeps an account of all the variables encountered in an expression
         self.line_no = -1
         self.current_line = None
         self.advance()
 
     def advance(self):
+        '''Advances the line_no and assigns the current_line'''
         while self.line_no + 1 < len(self.ast):
             self.line_no += 1
             self.current_line = self.ast[self.line_no]
@@ -132,9 +133,9 @@ class Compiler:
         """Compiles the equation command"""
         name = self.current_line.name
         lhs = self.compile_expr(self.current_line.lhs)
-        lhsvar = list(simplify(lhs).free_symbols)
+        lhsvar = list(simplify(lhs,deep=False).free_symbols)
         rhs = self.compile_expr(self.current_line.rhs)
-        rhsvar = list(simplify(rhs).free_symbols)
+        rhsvar = list(simplify(rhs,deep=False).free_symbols)
         allvars = list(set(lhsvar + rhsvar + self.var_list))
         print(allvars)
         self.var_list = allvars
@@ -260,7 +261,7 @@ class Compiler:
         """Actual function compiler, forms root for the other function-compilers"""
 
         name = func.function_name
-        args = func.args.values
+        args = func.args.variables
         # Tuple check
         if type == "DCLR":
             if len(args) == 1:

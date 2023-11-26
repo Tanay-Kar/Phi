@@ -121,7 +121,7 @@ def __eqsolve__(eq_set,var_set):
     print(f'\\nSolving {{eq_set}} for {{var_set}} ...')
     roots = sp.solve(eq_set,var_set)
     print(f'\\n{{roots}}')
-      
+
 '''      
 
 

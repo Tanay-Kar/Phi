@@ -1,4 +1,6 @@
+import time
 
+a = time.time()
 from math import *
 import math
 import sympy as sp
@@ -10,6 +12,8 @@ from cycler import cycler
 from mpl_interactions import panhandler, zoom_factory
 from ing_theme_matplotlib import mpl_style
 
+b = time.time()
+
 table_used = False
 mpl_style(dark=True,minor_ticks=True)
 mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
@@ -18,7 +22,9 @@ i = sp.I if False else 1j
 
 with plt.ioff() :
     fig, ax = plt.subplots()
-    
+
+c = time.time()
+   
 def __plot__(func,name,integration=False,integration_limits=[0,0]):
     global table_used
     table_used = True
@@ -100,15 +106,19 @@ def __eqsolve__(eq_set,var_set):
     print(f'\nSolving {eq_set} for {var_set} ...')
     roots = sp.solve(eq_set,var_set)
     print(f'\n{roots}')
-      
+    
+d = time.time() 
+     
 x = sp.Symbol('x')
 y = sp.Symbol('y')
 
-eq1 = sp.Eq((x + y),5)
+eq1 = sp.Eq((x + y),12)
 eq2 = sp.Eq((x - y),7)
 __create_namespace__()
 __eqsolve__((eq1,eq2),(x,y))
 from math import *
+
+e = time.time()
 
 if table_used:
     plt.axhline(y=0, color='grey')
@@ -125,3 +135,12 @@ if table_used:
         else:
             plt.axis([0, 15, 0, 15])
     plt.show()
+
+f = time.time()
+
+print('Importing modules: ',b-a)
+print('Miscelaneous: ',c-b)
+print('Defining modules: ',d-c)
+print('Working code: ',e-d)
+print('Footer: ',f-e)
+print('Total time: ',f-a)

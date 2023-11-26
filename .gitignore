@@ -1,3 +1,4 @@
 *.pyc
 *.cpython-311.pyc
 .vscode/settings.json
+test2.py

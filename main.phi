@@ -1,5 +1,4 @@
-eq1: x + y = 5
-
+eq1: x + y = 12
 eq2: x - y = 7
 
 solve (eq1,eq2) for (x,y)
