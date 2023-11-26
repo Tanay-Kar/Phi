@@ -8,7 +8,7 @@ Author: Tanay Kar
 """
 
 from pyparsing import alphanums
-from sympy import simplify
+from sympy import simplify, expand
 from analyser import SpecificAnalyser
 import header
 from read import read_file
@@ -133,9 +133,9 @@ class Compiler:
         """Compiles the equation command"""
         name = self.current_line.name
         lhs = self.compile_expr(self.current_line.lhs)
-        lhsvar = list(simplify(lhs,deep=False).free_symbols)
+        lhsvar = list(expand(lhs,deep=False).free_symbols)
         rhs = self.compile_expr(self.current_line.rhs)
-        rhsvar = list(simplify(rhs,deep=False).free_symbols)
+        rhsvar = list(expand(rhs,deep=False).free_symbols)
         allvars = list(set(lhsvar + rhsvar + self.var_list))
         print(allvars)
         self.var_list = allvars
