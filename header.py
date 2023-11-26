@@ -24,15 +24,21 @@ import sympy as sp
 import numpy as np
 import inspect
 from matplotlib import pyplot as plt
+import matplotlib as mpl
+from cycler import cycler
+from mpl_interactions import panhandler, zoom_factory
+from ing_theme_matplotlib import mpl_style
 
-# Lazy imports
-# import matplotlib as mpl
-# from cycler import cycler
-# from mpl_interactions import panhandler, zoom_factory
-# from ing_theme_matplotlib import mpl_style
 '''
 
 modules = f'''
+
+mpl_style(dark={___graph_theme_dark___},minor_ticks=True)
+mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
+
+with plt.ioff() :
+    fig, ax = plt.subplots()
+    
 table_used = False
 
 i = sp.I if {___define_iota___} else 1j
@@ -125,17 +131,6 @@ def __eqsolve__(eq_set,var_set):
 
 footer = f'''
 if table_used:
-    import matplotlib as mpl
-    from cycler import cycler
-    from mpl_interactions import panhandler, zoom_factory
-    from ing_theme_matplotlib import mpl_style
-    
-    mpl_style(dark={___graph_theme_dark___},minor_ticks=True)
-    mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
-
-
-    with plt.ioff() :
-        fig, ax = plt.subplots()
     plt.axhline(y=0, color='grey')
     plt.axvline(x=0, color='grey')
     plt.axis('auto')
