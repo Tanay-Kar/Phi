@@ -6,6 +6,13 @@ import numpy as np
 import inspect
 from matplotlib import pyplot as plt
 
+# Lazy imports
+# import matplotlib as mpl
+# from cycler import cycler
+# from mpl_interactions import panhandler, zoom_factory
+# from ing_theme_matplotlib import mpl_style
+
+table_used = False
 
 i = sp.I if False else 1j
     
@@ -100,7 +107,7 @@ __create_namespace__()
 __eqsolve__((eq1,eq2),(x,y))
 from math import *
 f = lambda x: ((((3 * x) ** 2) + (2 * x)) - 1)
-
+__plot__(f,'f(x)',integration=True,integration_limits=[-1,2])
 x = sp.Symbol('x')
 
 __create_namespace__()
@@ -114,7 +121,6 @@ if table_used:
     from mpl_interactions import panhandler, zoom_factory
     from ing_theme_matplotlib import mpl_style
     
-    table_used = False
     mpl_style(dark=True,minor_ticks=True)
     mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
 

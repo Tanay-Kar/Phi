@@ -7,8 +7,7 @@ Author: Tanay Kar
 ----------------
 """
 
-from pyparsing import alphanums
-from sympy import simplify, expand
+from sympy import expand
 from analyser import SpecificAnalyser
 import header
 from read import read_file
@@ -137,7 +136,6 @@ class Compiler:
         rhs = self.compile_expr(self.current_line.rhs)
         rhsvar = list(expand(rhs,deep=False).free_symbols)
         allvars = list(set(lhsvar + rhsvar + self.var_list))
-        print(allvars)
         self.var_list = allvars
         code = f"{name} = sp.Eq({lhs},{rhs})\n"
         self.precompiled_code += code
@@ -374,4 +372,4 @@ if __name__ == "__main__":
 
     compiler = Compiler(file_name="main.phi")
     cache = compiler.compile()
-    # os.system(f"python3 {cache}")
+    os.system(f"python3 {cache}")
