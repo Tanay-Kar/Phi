@@ -121,9 +121,28 @@ def __integrate__(func,func_name,func_str,var,indefinite=True,integration_limits
         print(f'\\nIntegral of {{func_str}} from {{integration_limits[0]}} to {{integration_limits[1]}} = {{func_integral}}')
 
 def __eqsolve__(eq_set,var_set): 
-    print(f'\\nSolving {{eq_set}} for {{var_set}} ...')
-    roots = sp.solve(eq_set,var_set)
-    print(f'\\n{{roots}}')
+    print(f'\\nSolving {{len(eq_set)}} equation{{"s" if len(eq_set)>1 else ""}} for {{var_set}} ...')
+    for i in eq_set:
+        print(i.lhs,'=',i.rhs)
+    roots = sp.solve(eq_set,var_set,dict=True)
+    if not roots:
+        print('No solutions found')
+        return
+    print('\\nSolution set:')
+    if type(roots) == dict:
+        for i in roots:
+            print(f'{{i}} = {{roots[i]}}',end=' , ')
+    
+    elif type(roots) == list and len(roots) == 1:
+        for i in roots[0]:
+            print(f'{{i}} = {{roots[0][i]}}',end=' , ')
+            
+        print()
+    else:
+        for i in roots:
+            for j in i:
+                print(f'{{j}} = {{i[j]}}',sep=' , ')
+            print()
 
 '''      
 

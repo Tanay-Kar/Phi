@@ -1,7 +1,6 @@
 
 from math import *
 import math
-import re
 import sympy as sp
 import numpy as np
 import inspect
@@ -112,20 +111,28 @@ def __eqsolve__(eq_set,var_set):
     if type(roots) == dict:
         for i in roots:
             print(f'{i} = {roots[i]}',end=' , ')
+    
+    elif type(roots) == list and len(roots) == 1:
+        for i in roots[0]:
+            print(f'{i} = {roots[0][i]}',end=' , ')
+            
+        print()
     else:
         for i in roots:
             for j in i:
-                print(f'{j} = {i[j]}',end=' , ')
+                print(f'{j} = {i[j]}',sep=' , ')
             print()
+
 y = sp.Symbol('y')
 x = sp.Symbol('x')
+z = sp.Symbol('z')
 
-eq1 = sp.Eq(((3 * x) - (2 * y)),14)
-eq2 = sp.Eq(((6 * x) + (4 * y)),10)
+eq1 = sp.Eq((x + z),6)
+eq2 = sp.Eq((x + y),5)
+eq3 = sp.Eq((y + z),7)
 __create_namespace__()
-__eqsolve__((eq1,eq2),(x,y))
+__eqsolve__((eq1,eq2,eq3),(x,y,z))
 from math import *
-
 
 if table_used:
     plt.axhline(y=0, color='grey')
