@@ -1,4 +1,4 @@
-![Phi](docs/Phi_logo_full.png)
+<p align="center">![Phi](docs/Phi_logo_full.png)</p>
 <hr>
 
 # Programmation Heuristique Interface
