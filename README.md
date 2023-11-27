@@ -1,4 +1,4 @@
-<p align="center"> <image src=docs/Phi_logo_full.png alt=Phi> </p>
+<p align="center"> <image src="https://github.com/Tanay-Kar/Phi/assets/93914273/82f62215-8746-40d4-8501-509e924bdcc7" alt=Phi> </p>
 <hr>
 
 <h1 align="center">Programmation Heuristique Interface</h1>
