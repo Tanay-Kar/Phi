@@ -127,7 +127,11 @@ def __eqsolve__(eq_set,var_set):
             print()
 
 
-add = lambda a,b: (a + b)
+def add(x,y):
+	
+	a = (x + y)
+	
+	return 0
 
 print(add(1,2))
 

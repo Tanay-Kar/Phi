@@ -235,7 +235,7 @@ class Compiler:
             if i.type == "ENDFUNC":
                 command_code = Compiler(ast=command).compile()
                 command_code = "\t" + command_code.replace("\n", "\n\t")
-                code = f"""def {self.compile_function(function,"CALL")}:\n{command_code}\n"""
+                code = f"""def {self.compile_function(function,"CALL")}:\n{command_code}\n\treturn 0\n"""
                 self.precompiled_code += code
                 return
 
