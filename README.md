@@ -31,20 +31,20 @@ As of now , Phi is able to perform basic mathematical operations, such as:
 - Ensure Git is installed on your system. If not, install it from [here](https://git-scm.com/downloads).
 
 - Clone the repository using the following command:
-```
+```bash
 git clone https://github.com/Tanay-Kar/Phi.git
 
 cd Phi
 ```
 
 - Install the required dependencies using the following command:
-```
+```bash
 pip install sympy numpy matplotlib mpl-interactions qbstyles ing_theme_matplotlib colorama
 ```
 You may need to create a virtual environment before installing the dependencies in some debian distros.
 
 - Run the following command to execute the provided file:
-```
+```bash
 python compiler.py
 ```
 Ensure that the correct python binary is used . In linux systems python3 is common.
