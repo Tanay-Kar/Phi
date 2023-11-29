@@ -14,6 +14,7 @@ except ImportError:
     from qbstyles import mpl_style
 
 
+
 mpl_style(dark=True,minor_ticks=False)
 mpl.rcParams['axes.prop_cycle'] = cycler('color', ['#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf','#1f77b4'])
 
@@ -125,27 +126,10 @@ def __eqsolve__(eq_set,var_set):
                 print(f'{j} = {i[j]}',sep=' , ')
             print()
 
-x = sp.Symbol('x')
-y = sp.Symbol('y')
 
-eq1 = sp.Eq(((3 * x) - (4 * y)),5)
-eq2 = sp.Eq(((4 * x) - (3 * y)),10)
-__create_namespace__()
-__eqsolve__((eq1,eq2),(x,y))
-from math import *
-f = lambda x: (((x ** 2) + (2 * x)) - 1)
-x = sp.symbols('x')
+add = lambda a,b: (a + b)
 
-__create_namespace__()
-__solve__(f(x),'f','f(x)')
-from math import *
-__plot__(f,'f(x)',integration=True,integration_limits=[-1,3])
-x = sp.Symbol('x')
-
-__create_namespace__()
-__integrate__(f(x),'f','f(x)','x',indefinite=False,integration_limits=[-1,3])
-
-from math import *
+print(add(1,2))
 
 if table_used:
     plt.axhline(y=0, color='grey')

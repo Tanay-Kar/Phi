@@ -41,7 +41,7 @@ class SpecificAnalyser:
                         self.specicific_ast.append(const.FunctionDeclarationBlock(
                             function=i.tokens[1],
                             commands=i.tokens[3],
-                            mode='multiline',
+                            mode='inline',
                             ))
                     else:
                         self.specicific_ast.append(const.FunctionDeclarationBlock(
