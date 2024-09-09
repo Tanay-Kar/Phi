@@ -78,4 +78,4 @@ solve f(x)
 integrate f(x) wrt x from -1 to 3 plot
 ```
 
-This example shows, just how adaptable the syntax of Phi is from a mathematical point of view. The use of implicit multiplication (```2x```) , inline function declaration (```f(x) = ...```), sentence-like syntax (```integrate f(x) wrt x from -1 to 3 plot```) , etc. 
+This example shows, just how adaptable the syntax of Phi is from a mathematical point of view. The use of implicit multiplication (```2x```) , inline function declaration (```f(x) = ...```), sentence-like syntax (```integrate f(x) wrt x from -1 to 3 plot```) , etc. illustrates the same
